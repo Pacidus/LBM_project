@@ -1,7 +1,8 @@
 !  Author : Pacidus
-! Started at: 31.10.2020
+! Started at: 31.10.2020 00:17:57
 
 Module Param
+  ! Initializes all the constants
   Implicit None
   Integer(1), Parameter :: D      = 2                       ! D2
   Integer(1), Parameter :: Q      = 9                       ! Q9
@@ -45,13 +46,21 @@ Module Param
 End Module Param
 
 Module Functions
-  
+  ! Initializes all the functions
   Contains
 
-    Function Object()
+
+
+End Module Functions
+
+Module Subroutines
+  ! Initializes all the Subroutines
+  Contains
+    
+    Subroutine Object(Obj)
       Use Param
       Implicit None
-      Integer(1) :: Object(L,H)
+      Integer(1) :: Obj(L,H)
       Character(Len = 140), Parameter  :: Parbash = '(&
         "convert -background white -compress None objet.svg -resize ",&
         i0,&
@@ -70,19 +79,13 @@ Module Functions
       Read(10, *) trash
     
       Do i=1, H
-        Read(10, *) Object(:, i)
+        Read(10, *) Obj(:, i)
     	End Do
     	
     	Close(10)
-    End Function
-
-End Module Functions
-
-Module Subroutines
-
-  Contains
-  
-    subroutine InitF(F)
+    End Subroutine
+    
+    Subroutine InitF(F)
       Use Param
       Implicit None
       Real(8) :: F(Q,L,H)
@@ -94,9 +97,9 @@ Module Subroutines
           F(i,:,:) = F(i,:,:)*w(i) 
       End Do
       
-    end subroutine
+    End Subroutine
     
-    subroutine Stream(F)
+    Subroutine Stream(F)
       Use Param
       Implicit None
       Real(8) :: F(Q,L,H)
@@ -108,11 +111,12 @@ Module Subroutines
         End Do
       End Do
 
-    end subroutine
+    End Subroutine
     
 End Module Subroutines
 
 Module Var
+  ! Initializes all the Variables
   Use Param
   Implicit None
   Integer(1) :: Obj(L, H)
@@ -127,10 +131,11 @@ Program LBM2D
   Implicit None
   Integer(8) :: dP = 0
   
+  Call Object(Obj)
   Call InitF(F)
 
-  Obj = Object()
   Do dP = 0, P  
     Call Stream(F)
+    Write(*,*) dP
   End Do
 End Program LBM2D
