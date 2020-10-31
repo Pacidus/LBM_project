@@ -49,8 +49,6 @@ Module Functions
   ! Initializes all the functions
   Contains
 
-
-
 End Module Functions
 
 Module Subroutines
@@ -104,13 +102,13 @@ Module Subroutines
       Implicit None
       Real(8) :: F(Q,L,H)
       Integer(1) :: i, j
-
-      Do i=1, Q
-        Do j=1, D
-          F(i,:,:) = Cshift(F(i,:,:), e(i,j),j)
+      !$Omp Parallel Do
+        Do i=1, Q
+          Do j=1, D
+            F(i,:,:) = Cshift(F(i,:,:), e(i,j),j)
+          End Do
         End Do
-      End Do
-
+      !$Omp End Parallel Do
     End Subroutine
     
 End Module Subroutines
