@@ -7,11 +7,11 @@ Module Param
   Private
   Real(8), Parameter :: lx         = 4._8                           ! m
   Real(8), Parameter :: ly         = 2._8                           ! m
-  Real(8), Parameter :: dt         = 5D-5                           ! s
+  Real(8), Parameter :: dt         = 1D-5                           ! s
   Real(8), Public, Parameter :: cs = 340._8                         ! m·s⁻¹
   Real(8), Parameter :: c          = cs*Dsqrt(3._8)                 ! m·s⁻¹
   Real(8), Parameter :: dl         = cs*dt                          ! m
-  Real(8), Parameter :: t          = 1D4                            ! s
+  Real(8), Parameter :: t          = 1D2                            ! s
   Real(8), Parameter :: rho        = 1.177_8                        ! kg·m⁻³
   Real(8), Parameter :: nu         = 1.57D-5                        ! m²·s⁻¹
   Real(8), Parameter :: tau        = (nu/(dt*cs**2)) + 5D-1         ! ø
@@ -209,18 +209,12 @@ Module Subroutines
     End Subroutine
     
     Subroutine Collision(F)
-      Use Param, Only: D, Q, L, H, itau, Mitau
-      Use Functions, Only: Feq, U, R
+      Use Param, Only: Q, L, H, itau, Mitau
+      Use Functions, Only: Feq
       Implicit None
       Real(8) :: F(Q,L,H)
-      Real(8) :: eqF(Q,L,H)
-      Real(8) :: S(D, L,H)
-      Integer(1) :: i
-      eqF = Feq(F)
-      S = 0.00001*U(F, R(F))
-      Do i = 1, Q
-        F(i, :, :) = (F(i, :, :)*mitau) + (itau*eqF(i, :, :)) - (S(1, :, :)**2+S(2, :, :)**2)
-      End Do
+   
+      F = F*mitau + itau*Feq(F)
     End Subroutine
     
 End Module Subroutines
