@@ -8,7 +8,7 @@ Module Fconst
   Implicit None
   Real(8), Parameter :: cs  = 3.4d2         ! m·s⁻¹   Speed of sound
   Real(8), Parameter :: rho = 1.177d0       ! kg·m⁻³  Fluid density
-  Real(8), Parameter :: nu  = .01!1.57d-5    ! m²·s⁻¹  Kinematic viscosity
+  Real(8), Parameter :: nu  = 1!.01         ! m²·s⁻¹  Kinematic viscosity
 End Module Fconst
 
 
@@ -20,7 +20,7 @@ Module Sconst
   Real(8), Parameter :: lx  = 4d0           ! m     Length of the box
   Real(8), Parameter :: ly  = 2d0           ! m     Height of the box
   Real(8), Parameter :: t   = 5d0           ! s     Total time of the simulation
-  Real(8), Parameter :: sp  = 2d1           ! m·s⁻¹ Inlet Speed    
+  Real(8), Parameter :: sp  = 2d0           ! m·s⁻¹ Inlet Speed    
 End Module Sconst
 
 
@@ -31,7 +31,7 @@ Module Dconst
   Use Fconst, Only: cs
   Use Sconst, Only: lx, ly, t
   Implicit None
-  Real(8), Parameter :: dt    = 1d-5        ! s Timestep
+  Real(8), Parameter :: dt    = 5d-5!5      ! s Timestep
   Real(8), Parameter :: dl    = cs*dt       ! m Spatial step
   Integer(4), Parameter :: H  = Int(ly/dl)  ! ø Number of height-step
   Integer(4), Parameter :: L  = Int(lx/dl)  ! ø Number of length-step

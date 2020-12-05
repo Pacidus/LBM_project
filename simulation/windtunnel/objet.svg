@@ -23,17 +23,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.9899495"
-     inkscape:cx="191.02654"
-     inkscape:cy="214.11628"
+     inkscape:zoom="0.49497475"
+     inkscape:cx="489.21548"
+     inkscape:cy="436.23132"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
      showgrid="false"
-     inkscape:window-width="1312"
-     inkscape:window-height="704"
-     inkscape:window-x="1254"
-     inkscape:window-y="1179"
+     inkscape:window-width="1200"
+     inkscape:window-height="1883"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata5">
@@ -51,12 +51,15 @@
      inkscape:label="Calque 1"
      inkscape:groupmode="layer"
      id="layer1">
-    <ellipse
-       style="fill:#000000;stroke:none;stroke-width:0.190394;stroke-linejoin:round"
-       id="path831"
-       cx="35.13868"
-       cy="48.026161"
-       rx="9.8298006"
-       ry="9.7961378" />
+    <path
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.276006px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M -0.1,100 47,70 210,80 V 20 L 47,30 -0.1,0 H 210 v 100 z"
+       id="path850"
+       sodipodi:nodetypes="ccccccccc" />
+    <path
+       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 10,50 20,40 40,50 20,60 Z"
+       id="path835"
+       sodipodi:nodetypes="ccccc" />
   </g>
 </svg>
