@@ -1,5 +1,6 @@
 *.png
 *.pbm
-*/*/anim/*.png
-*/*/anim2/*.svg
 *.csv
+**/anim/*.png
+**/anim2/*.svg
+simulation/**/*.mp4
