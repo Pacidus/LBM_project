@@ -1,4 +1,5 @@
 *.png
 *.pbm
-*/anim/*.png
-*/anim2/*.svg
+*/*/anim/*.png
+*/*/anim2/*.svg
+*.csv
