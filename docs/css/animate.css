@@ -1,0 +1,24 @@
+/* Table of contents
+––––––––––––––––––––––––––––––––––––––––––––––––––
+- video animate
+*/
+
+/* video animate
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+#vidanimate {
+  position: relative;
+  width: 100%;
+}
+
+.containvid {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 100%;
+}
+
+.contentvid {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+}
