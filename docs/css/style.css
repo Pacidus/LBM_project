@@ -1,0 +1,18 @@
+/* Table of contents
+––––––––––––––––––––––––––––––––––––––––––––––––––
+- refs
+*/
+
+/* refs
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.ref:link {
+  text-decoration: inherit;
+  color: inherit;
+  cursor: auto;
+}
+
+.ref:visited{
+  text-decoration: inherit;
+  color: inherit;
+  cursor: auto;
+}
