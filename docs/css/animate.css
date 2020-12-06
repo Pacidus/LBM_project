@@ -11,10 +11,11 @@
 }
 
 .containvid {
-  position: fixed;
+  position: relative;
   right: 0;
   top: 0;
   width: 100%;
+  color: #222;
 }
 
 .contentvid {

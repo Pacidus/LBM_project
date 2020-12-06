@@ -10,7 +10,6 @@
 
 /* Table of contents
 ––––––––––––––––––––––––––––––––––––––––––––––––––
-- Body
 - Grid
 - Base Styles
 - Typography
@@ -25,16 +24,6 @@
 - Clearing
 - Media Queries
 */
-
-/* Body
-–––––––––––––––––––––––––––––––––––––––––––––––––– */
-
-body {
- margin:0;
- padding:0;
- background:#151515;
- color:#eaeaea;
-}
 
 /* Grid
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
@@ -135,7 +124,9 @@ body {
   line-height: 1.6;
   font-weight: 400;
   font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: #222; }
+  color: #eaeaea;
+  background:#151515;
+}
 
 
 /* Typography

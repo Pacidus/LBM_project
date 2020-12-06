@@ -1,6 +1,7 @@
 /* Table of contents
 ––––––––––––––––––––––––––––––––––––––––––––––––––
 - refs
+- figures
 */
 
 /* refs
@@ -15,4 +16,10 @@
   text-decoration: inherit;
   color: inherit;
   cursor: auto;
+}
+
+/* figures
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.fig {
+  text-align: center;
 }

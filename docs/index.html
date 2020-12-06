@@ -33,26 +33,45 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <link rel="icon" type="image/png" href="images/favicon.png">
 
+
+  <!-- LaTeX Equations
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
+  <script>
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+  </script>
+  
 </head>
   <body>
-
-    <div class="container">
-      <div class="containvid">
-        <video autoplay muted loop id="vidanimate">
-          <source src="videos/chaos.mp4" type="video/mp4">
-        </video>
-        <div class="contentvid">
-          <h2>Lattice Boltzmann methods</h2>
-          <a href="https://en.wikipedia.org/wiki/The_Call_of_Cthulhu" class="ref">
-            <h3>The Call of Complexity</h3>
-          </a>
-        </div>
-      </div>
-      <div class="row">
-        <div class="ten columns" style="margin-top: 25%">
-        </div>
+    <div class="containvid">
+      <video autoplay muted loop id="vidanimate">
+        <source src="videos/chaos.mp4" type="video/mp4">
+      </video>
+      <div class="contentvid">
+        <h2>Lattice Boltzmann methods</h2>
+        <a href="https://en.wikipedia.org/wiki/The_Call_of_Cthulhu" target="_blank" class="ref">
+          <h3>The Call of Complexity</h3>
+        </a>
       </div>
     </div>
 
+    <div class="container">
+      <div class="row">
+        <div class="seven columns" style="margin-top: 10%">
+          <p> The Lattice Boltzmann Methods is a class of
+          computational fluid dynamics methods for fluid simulation.
+          </p>
+        </div>
+        <div class="five columns" style="margin-top: 10%">
+          <div  name="fig1" "class="fig">
+            <video controls autoplay muted loop id="vidanimate">
+              <source src="videos/wing.mp4" type="video/mp4">
+            </video>
+            Fig 1 - Rotationnal of the fluid arround a wing profile with $$Re = 4$$
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
+<!--as you can see in the <a href="#fig1">figure 1</a>-->
