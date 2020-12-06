@@ -44,7 +44,12 @@ L = rgb.shape
 l = [2/L[0],4/L[1]]
 xcoord = [int(.75/l[1]),int(2.5/l[1])]
 
-constr = lambda : rgb[:,j].sum(1).nonzero()[0]
+def constr():
+    indices = rgb[:,j].sum(1).nonzero()[0]
+    d = indices[0]-1
+    f = indices[-1]+1
+    return(np.array([d]+list(indices)+[f]))
+    
 j = xcoord[0]
 y1coord = constr()
 j = xcoord[1]
@@ -56,20 +61,21 @@ y2 = l[0]*y2coord
 extent = [0, 4, 0, 2]
 img = ax1.imshow(rgb, extent=extent)
 
-yth = y1[rgb[y1coord,xcoord[0]].sum(1)>3]
+yth = y1
 h1 = yth[-1] - yth[0]
 
-yth = y2[rgb[y2coord,xcoord[1]].sum(1)>3]
+yth = y2
 h2 = yth[-1] - yth[0]
-def load(fr):
+def load(fr, rgb):
     U  = np.loadtxt(namedata[0]%fr)
     V  = np.loadtxt(namedata[1]%fr)
-    Vx1 = U[y1coord,xcoord[0]]*(rgb[y1coord,xcoord[0]].sum(1)>30)
-    Vx2 = U[y2coord,xcoord[1]]*(rgb[y2coord,xcoord[1]].sum(1)>30)
-    
+    Vx1 = U[y1coord,xcoord[0]]
+    Vx2 = U[y2coord,xcoord[1]]
+    Vx1[[0,-1]] = 0
+    Vx2[[0,-1]] = 0
     return(Vx1[::-1], Vx2[::-1])
 
-Vx1, Vx2 = load(fr)
+Vx1, Vx2 = load(fr,rgb)
 
 line1 = ax2.plot(Vx1,y1,'r')[0]
 line2 = ax2.plot(Vx2,y2,'b')[0]
@@ -96,8 +102,11 @@ while(cap.isOpened()):
     plt.savefig("./anim2/%05d.svg"%fr)
     
     fr += 1
+        
+    ret, frame = cap.read()
+    rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     
-    Vx1, Vx2 = load(fr)
+    Vx1, Vx2 = load(fr, rgb)
     line1.set_xdata(Vx1)
     line2.set_xdata(Vx2)
     vmax = Poiseuille(V1[-1],h2)
@@ -123,12 +132,6 @@ while(cap.isOpened()):
     ax4.autoscale_view()
     
     img.set_array(rgb)
-    
-    ret, frame = cap.read()
-    rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
 
 plt.savefig("./anim2/%05d.svg"%fr)
 
