@@ -386,8 +386,8 @@ Subroutine Object
   
   Call execute_command_line(command, wait=.true.)
   
-  command = "convert -compress none objet.png -background white &
-    &-flatten -threshold 255 objet.pbm"
+  command = "convert -compress none objet.png -alpha extract -threshold 0%&
+  & -negate objet.pbm"
   Call execute_command_line(command, wait=.true.)
   
   Open(10, file = 'objet.pbm', action='read')

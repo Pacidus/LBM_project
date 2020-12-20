@@ -1,0 +1,40 @@
+\paragraph*{}
+  Dans le cas que nous avons choisis nous pouvons réécrire l'équation de Boltzmann (\ref{eq:Bol})
+  de la manière suivante :
+  \begin{equation} \label{eq:BolnoF}
+    \pderiv{f}{t} + \v \cdot \vnabla_{\r} f = C(f),
+  \end{equation}
+  si l'on remplace $C(f)$ par l'opérateur BGK :
+  \begin{equation} \label{eq:BGK}
+    C(f) = -\frac{1}{\tau}\left(f -\feq\right),
+  \end{equation}
+  on obtiens :
+  \begin{equation} \label{eq:BolCF}
+    \pderiv{f}{t} + \v \cdot \vnabla_{\r} f = -\frac{1}{\tau}\left(f -\feq\right).
+  \end{equation}
+  
+  Si l'on ajoute $f$ des deux cotées et que l'on discrétise l'équation \ref{eq:BolCF} on obtiens notre résultat final :
+  
+  \begin{equation} \label{eq:LBGK}
+    f_i(\r+\dt \ei, t + \dt) = f_i -\frac{1}{\tau}\left(f_i -\feq_i\right).
+  \end{equation}
+  
+  Reste encore à définir les termes apparaissant dans notre équation,
+  \begin{itemize} \label{eq:defmacro}
+    \itemb $\tau$ :
+      \begin{equation} \label{eq:tau}
+        \tau = \frac{\nu}{c_s^2 \dt} + \frac{1}{2},
+      \end{equation}
+    \itemb $\feq_i$ :
+      \begin{equation} \label{eq:feq}
+        \feq_i = \w \rho \left(1 + \frac{\u \cdot \ei}{c_s^2} + \frac{(\u \cdot \ei)^2}{2 c_s^4} - \frac{\u \cdot \u}{2 c_s^2} \right),
+      \end{equation}
+      \itemb $\rho$ :
+      \begin{equation} \label{eq:rho}
+        \rho = \sum_{i=1}^Q f_i,
+      \end{equation}
+      \itemb $\u$ :
+      \begin{equation} \label{eq:u}
+        \u = \frac{1}{\rho}\sum_{i=1}^Q f_i\ei.
+      \end{equation}
+  \end{itemize}

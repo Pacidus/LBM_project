@@ -57,7 +57,7 @@ ax1.plot([l[1]*coord[1][1]],[l[0]*coord[1][0]], 'bo')
 
 while(cap.isOpened()):
     
-    plt.savefig("./anim2/%05d.png"%fr)
+    plt.savefig("./anim2/%05d.svg"%fr)
     
     fr += 1
     
@@ -84,7 +84,7 @@ while(cap.isOpened()):
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-plt.savefig("./anim2/%05d.png"%fr)
+plt.savefig("./anim2/%05d.pdf"%fr)
 
 img.set_array(rgb)
 

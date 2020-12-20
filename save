@@ -1,0 +1,82 @@
+
+    Les équations gouvernants la mécanique des fluides sont connues depuis le milieu du XIXe siècle avec les équations de \NS{}.
+    Elles sont le fruit de la collaboration et du travail de plusieurs générations de chercheurs \cite{wiki:NS}.
+    Pour un fluide incompressible (ce qui correspond par exemple à l'eau température et pression ambiante), elles prennent la forme suivante : 
+    \begin{itemize}
+      \item incompressibilité  
+      \begin{equation}\label{eq:NS1}
+        \vnabla \cdot \u = 0,
+      \end{equation}
+  
+      \item bilan de la quantité de mouvement
+      \begin{equation}\label{eq:NS2}
+        \pdev{\u}{t} + (\u \cdot \vnabla)\u = - \dfrac{\vnabla P}{\rho} + \nu \Delta \u + \dfrac{\vec{F}_{ext}}{\rho}.
+      \end{equation}
+    \end{itemize}
+    Cette équation n'est qu'autre que la réécriture du principe fondamental de la dynamique \cite{Newt} pour un champ de vitesse du fluide $\u$. On as donc l'inertie volumique du fluide :
+    \begin{equation*}
+      \pdev{\vec{p}}{t} \to \rho\pdev{\u}{t} + \rho(\u \cdot \vnabla)\u,
+    \end{equation*}
+    les forces internes\footnote{Interne au fluide, mais externes à un élément infinitésimal du fluide.} pour un fluide incompressible:
+    \begin{equation*}
+      \vec{F}_{in} = - \vnabla P + \rho \nu \Delta \u,
+    \end{equation*}
+    et enfin les forces externes.
+
+  \paragraph*{} \label{eq:def1}
+    Les quantités exprimées dans les équations de \NS{} sont différentes grandeurs caractéristiques d'un fluide :
+    \begin{itemize}
+      \item Le champ de vitesse $\u$ du fluide :
+      $$[\u] = L \cdot T^{-1},$$
+      $$\u(\r,t) : \R^{n+1} \to \R^n.$$
+      \emph{Ici $n$ indique la dimension spatiale de notre problème pour la suite nous nous limiterons au cas 2D ($n$=2).}
+      \item La pression interne au fluide $P$ :
+      $$[P] = M\cdot L^{-1}\cdot T^{-2},$$
+      $$P(\r,t) : \R^{n+1} \to \R.$$
+      \emph{La pression est l'une des formes que prend l'énergie interne du fluide elle peut se convertir en énergie cinétique et réciproquement.}
+      \item La masse volumique du fluide $\rho$ :
+      $$[\rho] = M\cdot L^{-3},$$
+      $$\rho(\r,t) : \R^{n+1} \to \R.$$
+      \emph{Pour un fluide incompressible, $\rho$ est une constante du fluide et ne varie pas dans le temps néanmoins pour la suite, il reste utile de le définir comme une fonction de l'espace et du temps.}
+      \item La viscosité cinématique du fluide $\nu$ :
+      $$[\nu] = L^{2}\cdot T^{-1},$$
+      $$\nu \in \R.$$
+      \emph{La viscosité cinématique est une constante du fluide et peut se comprendre comme la capacité du fluide <<diffuser>> sa vitesse.}
+    \end{itemize}
+    \vspace{2cm}
+    
+  \paragraph*{}
+    La difficulté à résoudre les equations de \NS{} est largement reconnue, d'ailleurs le problème de l'existence et de la régularité des solution des équations de \NS{} fait partie de problèmes de millénaire de l'Institut de mathématiques Clay \cite{wiki:Mil}.
+    
+    À défaut de solutions exactes, c'est dès la première moitié du XXe siècle que ce développe les premières méthodes de résolutions numérique des équations de \NS{} \cite{Hunt1998}. Dès lors et avec l'arrivée des premiers ordinateurs de nombreuses méthodes de résolutions on vue le jour. La <<computational fluid dynamics>> (abrégé en CFD) est la branche de la dynamique des fluide qui utilise la résolution numérique pour résoudre et étudier la dynamique des fluide. La CFD regroupe énormément de méthodes de résolutions des équations de \NS. La méthode qui nous intéresse ici est la méthode de Boltzmann sur réseau aussi appelé Lattice Boltzmann methods souvent abrégée en LBM.    
+    Les premières traces de LBM peuvent se situer dans le milieu des années 80 avec entre autre les travaux sur les gaz sur réseau de {\sc D. d'Humières} et {\sc P. Lallemand} \cite{D'HUMIERES1985, d_Humi_res_1986, PhysRevLett.56.1505, DHUMIERES2009821}. Depuis lors cette méthode à gagnée en popularité comme le montrent les figures\footnote{Ces figures sont critiquables sur bien des points néanmoins, ils permettent d'illustrer une tendance générale. La plus importante étant la proportion croissante de publications sur les LBM illustrée dans la figure \ref{trend3}.} \ref{trend1}, \ref{trend2}, et \ref{trend3}.
+    
+  \begin{figure}[hbt!]
+	  \center
+	  \includegraphics[width=\linewidth]{LBMocc} 
+	  \caption{Nombres de publications possédant l'occurrence <<Lattice Boltzmann Methods>> répertoriées sur google scholar en fonction des années de publication.}
+	  \label{trend1}
+  \end{figure}
+  
+  \begin{figure}[hbt!]
+	  \center
+	  \includegraphics[width=\linewidth]{CFD} 
+	  \caption{Nombres de publications possédant l'occurrence <<Computational fluid dynamics>> répertoriées sur google scholar en fonction des années de publication.}
+	  \label{trend2}
+  \end{figure}
+  
+  \begin{figure}[hbt!]
+	  \center
+	  \includegraphics[width=\linewidth]{LBMoCFD} 
+	  \caption{Rapport en pourcentage de publications possédant l'occurrence <<Lattice Boltzmann Methods>> sur celles possédant l'occurrence <<Computational fluid dynamics>> répertoriées sur google scholar en fonction des années de publication.}
+	  \label{trend3}
+  \end{figure}
+  
+\section{La méthode de Boltzmann sur réseau}
+  La description quantitative des fluides
+  L'idée de LBM est de passer à l'échèle mésoscopique, c'est à dire à une échèle intermédiaire entre la description continue des équations de \NS{} et celles des molécules qui composent le fluide. À cette échèle c'est l'équation de Boltzmann qui domine:
+  \begin{equation}\label{eq:LBM}
+      
+  \end{equation}
+    Nous allons pour cela définir :
+  $$f(\r,\u,t) : \R^{2n + 1} \to \R$$ Avec $f(\r,\u,t)$ la distribution des probabilité associée à la vitesse et à la position des particules du fluide 
