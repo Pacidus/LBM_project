@@ -1,0 +1,36 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+ch}{\PYGZsh{}!/usr/bin/env python3}
+\PYG{c+c1}{\PYGZsh{} coding:utf\PYGZhy{}8}
+
+\PYG{k+kn}{import} \PYG{n+nn}{os}
+\PYG{k+kn}{import} \PYG{n+nn}{subprocess}
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k+kn}{as} \PYG{n+nn}{np}
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib.pyplot} \PYG{k+kn}{as} \PYG{n+nn}{plt}
+\PYG{k+kn}{from} \PYG{n+nn}{matplotlib} \PYG{k+kn}{import} \PYG{n}{rc}
+
+\PYG{n}{rc}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}font\PYGZdq{}}\PYG{p}{,}\PYG{o}{**}\PYG{p}{\PYGZob{}}\PYG{l+s+s2}{\PYGZdq{}family\PYGZdq{}}\PYG{p}{:}\PYG{l+s+s2}{\PYGZdq{}serif\PYGZdq{}}\PYG{p}{,}\PYG{l+s+s2}{\PYGZdq{}serif\PYGZdq{}}\PYG{p}{:[}\PYG{l+s+s2}{\PYGZdq{}Palatino\PYGZdq{}}\PYG{p}{]\PYGZcb{})}
+\PYG{n}{rc}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}text\PYGZsq{}}\PYG{p}{,} \PYG{n}{usetex}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{)}
+
+\PYG{n}{PUx} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}./Ux/\PYGZsq{}}
+\PYG{n}{PUy} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}./Uy/\PYGZsq{}}
+\PYG{n}{PP}  \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}./P/\PYGZsq{}}
+
+\PYG{n}{files} \PYG{o}{=} \PYG{n+nb}{sorted}\PYG{p}{(}\PYG{n}{os}\PYG{o}{.}\PYG{n}{listdir}\PYG{p}{(}\PYG{n}{PP}\PYG{p}{))}
+\PYG{n}{imgs} \PYG{o}{=} \PYG{n+nb}{sorted}\PYG{p}{(}\PYG{n}{os}\PYG{o}{.}\PYG{n}{listdir}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}./anim/\PYGZdq{}}\PYG{p}{))}
+\PYG{k}{for} \PYG{n}{f} \PYG{o+ow}{in} \PYG{n}{files}\PYG{p}{:}
+    \PYG{k}{if} \PYG{n}{f}\PYG{o}{.}\PYG{n}{split}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}.\PYGZdq{}}\PYG{p}{)[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{+}\PYG{l+s+s2}{\PYGZdq{}.png\PYGZdq{}} \PYG{o+ow}{not} \PYG{o+ow}{in} \PYG{n}{imgs}\PYG{p}{:}
+        \PYG{n}{Ux} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{loadtxt}\PYG{p}{(}\PYG{n}{PUx}\PYG{o}{+}\PYG{n}{f}\PYG{p}{)}
+        \PYG{n}{dUx} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{gradient}\PYG{p}{(}\PYG{n}{Ux}\PYG{p}{,} \PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{)}
+        \PYG{n}{Uy} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{loadtxt}\PYG{p}{(}\PYG{n}{PUy}\PYG{o}{+}\PYG{n}{f}\PYG{p}{)}
+        \PYG{n}{dUy} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{gradient}\PYG{p}{(}\PYG{n}{Uy}\PYG{p}{,} \PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{c+c1}{\PYGZsh{}        plt.imsave(\PYGZsq{}./anim/\PYGZsq{}+f.split(\PYGZdq{}.\PYGZdq{})[0]+\PYGZdq{}.png\PYGZdq{},np.sqrt(Uy*Uy+Ux*Ux), vmin=0, cmap=\PYGZsq{}jet\PYGZsq{})}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{imsave}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}./anim/\PYGZsq{}}\PYG{o}{+}\PYG{n}{f}\PYG{o}{.}\PYG{n}{split}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}.\PYGZdq{}}\PYG{p}{)[}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{+}\PYG{l+s+s2}{\PYGZdq{}.png\PYGZdq{}}\PYG{p}{,(}\PYG{n}{dUy}\PYG{o}{\PYGZhy{}}\PYG{n}{dUx}\PYG{p}{),}\PYG{n}{vmin} \PYG{o}{=} \PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{5e0}\PYG{p}{,} \PYG{n}{vmax}\PYG{o}{=}\PYG{l+m+mf}{5e0}\PYG{p}{,} \PYG{n}{cmap}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}jet\PYGZsq{}}\PYG{p}{)}
+\PYG{c+c1}{\PYGZsh{}    a = np.loadtxt(PP+f)}
+\PYG{c+c1}{\PYGZsh{}    if np.isnan(a).any():}
+\PYG{c+c1}{\PYGZsh{}        break}
+\PYG{c+c1}{\PYGZsh{}    plt.imshow(a, cmap=\PYGZsq{}jet\PYGZsq{})}
+\PYG{c+c1}{\PYGZsh{}    plt.pause(0.1)}
+\PYG{c+c1}{\PYGZsh{}    plt.cla()}
+\PYG{c+c1}{\PYGZsh{}    plt.clf()}
+    \PYG{c+c1}{\PYGZsh{}print(np.loadtxt(PUx+f).mean())}
+\end{Verbatim}

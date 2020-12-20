@@ -8,7 +8,7 @@ Module Fconst
   Implicit None
   Real(8), Parameter :: cs  = 3.4d2         ! m·s⁻¹   Speed of sound
   Real(8), Parameter :: rho = 1.177d0       ! kg·m⁻³  Fluid density
-  Real(8), Parameter :: nu  = 1!.01         ! m²·s⁻¹  Kinematic viscosity
+  Real(8), Parameter :: nu  = .001            ! m²·s⁻¹  Kinematic viscosity
 End Module Fconst
 
 
@@ -20,7 +20,7 @@ Module Sconst
   Real(8), Parameter :: lx  = 4d0           ! m     Length of the box
   Real(8), Parameter :: ly  = 2d0           ! m     Height of the box
   Real(8), Parameter :: t   = 5d0           ! s     Total time of the simulation
-  Real(8), Parameter :: sp  = 2d0           ! m·s⁻¹ Inlet Speed    
+  Real(8), Parameter :: sp  = 10d0           ! m·s⁻¹ Inlet Speed    
 End Module Sconst
 
 
@@ -31,8 +31,10 @@ Module Dconst
   Use Fconst, Only: cs
   Use Sconst, Only: lx, ly, t
   Implicit None
-  Real(8), Parameter :: dt    = 5d-5!5      ! s Timestep
-  Real(8), Parameter :: dl    = cs*dt       ! m Spatial step
+  Real(8), Parameter :: dt    = 12d-6!5     ! s Timestep
+  Real(8), Parameter :: sqrt3 = Dsqrt(3d0)  ! ø       No reason except aesthetic
+  Real(8), Parameter :: c     = cs*sqrt3    ! m·s⁻¹   Lattice speed
+  Real(8), Parameter :: dl    = c*dt        ! m Spatial step
   Integer(4), Parameter :: H  = Int(ly/dl)  ! ø Number of height-step
   Integer(4), Parameter :: L  = Int(lx/dl)  ! ø Number of length-step
   Integer(4), Parameter :: N  = Int(t/dt)   ! ø Number of timestep
@@ -44,18 +46,17 @@ End Module Dconst
 !===============================================================================
 Module Cconst
   Use Fconst, Only: cs, nu
-  Use Dconst, Only: dt
+  Use Dconst, Only: dt, c
   Use Sconst, Only: sp
   Implicit None
-  Real(8), Parameter :: sqrt3 = Dsqrt(3d0)  ! ø       No reason except aesthetic
-  Real(8), Parameter :: c     = cs*sqrt3    ! m·s⁻¹   Lattice speed
   Real(8), Parameter :: cs2   = cs*cs       ! m²·s⁻²  Sound speed squared
   Real(8), Parameter :: ics2  = 1d0/cs2     ! s²·m⁻²  Inverse of cs2
   Real(8), Parameter :: clean = nu*ics2/dt  ! ø       No reason except aesthetic
   Real(8), Parameter :: tau   = clean+5d-1  ! ø       Characteristic timescale
   Real(8), Parameter :: itau  = 1d0/tau     ! ø       Inverse of tau
   Real(8), Parameter :: mitau = 1d0-itau    ! ø       One minus inverse of tau
-  Real(8), Parameter :: zh    = cs/(cs-sp)  ! ø       Zou/He parameter
+  Real(8), Parameter :: zh1    = c/(c-sp)    ! ø       Zou/He parameter
+  Real(8), Parameter :: zh2   = sp/(3d0*c)  ! ø       another Zou/He parameter
   Real(8), Parameter :: sp2   = sp*sp       ! m²·s⁻²  Outlet speed squared
 End Module Cconst
 
@@ -116,10 +117,10 @@ Program LBM2D
 !    CALL CPU_TIME(time1)
     CALL IOlet
     CALL Bound
+    CALL Stream
     CALL CMacro
     CALL CFeq
     CALL Collide
-    CALL Stream
 !    CALL CPU_TIME(time2)
 !    timeTot = timeTot + (time2-time1)
 !    Print *, real(H*L*(1+dN))/timetot
@@ -141,13 +142,12 @@ End Program LBM2D
 !           Using Zou/He boundary condition to implement Dirichlet
 !===============================================================================
 Subroutine IOlet
-  Use Cconst, Only: cs, ics2, zh, sp2
-  Use Lconst, Only: Q, e, w
+  Use Cconst, Only: zh1, zh2, sp
   Use Var, Only: F, Rho, U
-  Use Dconst, Only: L, H
+  Use Dconst, Only: L, H, c
   Use Sconst, Only: sp
   Implicit None
-  Real(8) :: sca, Feq1, Feq2, R
+  Real(8) :: sca1, sca2, ux!, r
   Integer(4) :: j!, i
 
   ! Outflow condition
@@ -161,37 +161,31 @@ Subroutine IOlet
 !    F(9,i,H) = F(9,i,H-1)
 !  End Do
   ! Right wall
+  sca2 = 1d0/(3d0*c)
   Do j = 1, H
-    F(7,L,j) = F(7,L-1,j)
-    F(4,L,j) = F(4,L-1,j)
-    F(8,L,j) = F(8,L-1,j)
+    sca1 = F(1,L,j)+F(3,L,j)+F(5,L,j)+ (2d0*(F(6,L,j) + F(2,L,j) + F(9,L,j)))
+    ux = c*(1d0 - sca1)
+    
+    F(4,L,j) = F(2,L,j) + 2*ux*sca2
+    sca1 = F(5,L,j)-F(3,L,j)
+    F(7,L,j) = F(9,L,j) + (ux*sca2 + sca1)/2d0
+    F(8,L,j) = F(6,L,j) + (ux*sca2 - sca1 )/2d0
   End Do
   
   ! Inflow condition Left wall
   Do j = 1, H
     U(1,1,j) = sp
     U(2,1,j) = 0d0
-    sca = (F(4,1,j)+F(1,1,j)+F(2,1,j)+2*(F(7,1,j)+F(4,1,j)+F(8,1,j)))
-    r = sca*zh
-    Rho(1,j) = r
     
-    sca = e(8,1)*sp
-    Feq1 = w(8)*(1d0+(sca+.5d0*((sca*sca*ics2)-sp2))*ics2)
-    sca = e(6,1)*sp
-    Feq2 = w(6)*(1d0+(sca+.5d0*((sca*sca*ics2)-sp2))*ics2)
-    F(6,1,j) = F(8,1,j) + r*(Feq2 - Feq1)
+    Rho(1,j) = 1
     
-    sca = e(4,1)*sp
-    Feq1 = w(4)*(1d0+(sca+.5d0*((sca*sca*ics2)-sp2))*ics2)
-    sca = e(2,1)*sp
-    Feq2 = w(2)*(1d0+(sca+.5d0*((sca*sca*ics2)-sp2))*ics2)
-    F(2,1,j) = F(4,1,j) + r*(Feq2 - Feq1)
+    sca2 = zh2
+    F(2,1,j) = F(4,1,j) + sca2*2d0
     
-    sca = e(7,1)*sp
-    Feq1 = w(7)*(1d0+(sca+.5d0*((sca*sca*ics2)-sp2))*ics2)
-    sca = e(9,1)*sp
-    Feq2 = w(9)*(1d0+(sca+.5d0*((sca*sca*ics2)-sp2))*ics2)
-    F(9,1,j) = F(7,1,j) + r*(Feq2 - Feq1)
+    sca1 = 1d0/2d0*(F(5,1,j) - F(3,1,j))
+    sca2 = sca2/2d0
+    F(6,1,j) = F(8,1,j) + sca2 + sca1
+    F(9,1,j) = F(7,1,j) + sca2 - sca1
   End Do
 End Subroutine
 
@@ -386,8 +380,8 @@ Subroutine Object
   
   Call execute_command_line(command, wait=.true.)
   
-  command = "convert -compress none objet.png -background white &
-    &-flatten -threshold 255 objet.pbm"
+  command = "convert -compress none objet.png -alpha extract -threshold 0%&
+  & -negate objet.pbm"
   Call execute_command_line(command, wait=.true.)
   
   Open(10, file = 'objet.pbm', action='read')

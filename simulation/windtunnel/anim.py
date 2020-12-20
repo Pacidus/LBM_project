@@ -19,10 +19,11 @@ imgs = sorted(os.listdir("./anim/"))
 for f in files:
     if f.split(".")[0]+".png" not in imgs:
         Ux = np.loadtxt(PUx+f)
-        #dUx = np.gradient(Ux, axis=0)
+        dUx = np.gradient(Ux, axis=0)
         Uy = np.loadtxt(PUy+f)
-        #dUy = np.gradient(Uy, axis=1)
-        plt.imsave('./anim/'+f.split(".")[0]+".png",np.sqrt(Uy*Uy+Ux*Ux), vmin=0, cmap='jet')
+        dUy = np.gradient(Uy, axis=1)
+#        plt.imsave('./anim/'+f.split(".")[0]+".png",np.sqrt(Uy*Uy+Ux*Ux), vmin=0, cmap='jet')
+        plt.imsave('./anim/'+f.split(".")[0]+".png",(dUy-dUx),vmin = -5e0, vmax=5e0, cmap='jet')
 #    a = np.loadtxt(PP+f)
 #    if np.isnan(a).any():
 #        break

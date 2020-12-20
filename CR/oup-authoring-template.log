@@ -1,6 +1,7 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Debian) (preloaded format=pdflatex 2020.10.28)  8 DEC 2020 01:24
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Debian) (preloaded format=pdflatex 2020.10.28)  18 DEC 2020 23:07
 entering extended mode
- restricted \write18 enabled.
+ \write18 enabled.
+ Source specials enabled.
  %&-line parsing enabled.
 **oup-authoring-template.tex
 (./oup-authoring-template.tex
@@ -545,6 +546,71 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 )
 \Hy@SectionHShift=\skip80
 ))
+(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2020/02/11 v2.0o Standard LaTeX package
+)
+(/usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
+Package: inputenc 2018/08/11 v1.3c Input encoding file
+\inpenc@prehook=\toks36
+\inpenc@posthook=\toks37
+
+(/usr/share/texlive/texmf-dist/tex/latex/ucs/utf8x.def
+File: utf8x.def 2004/10/17 UCS: Input encoding UTF-8
+))
+(/usr/share/texlive/texmf-dist/tex/latex/ucs/ucs.sty
+Package: ucs 2013/05/11 v2.2 UCS: Unicode input support
+
+(/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-global.def
+File: uni-global.def 2013/05/13 UCS: Unicode global data
+)
+\uc@secondtry=\count311
+\uc@combtoks=\toks38
+\uc@combtoksb=\toks39
+\uc@temptokena=\toks40
+)
+(/usr/share/texlive/texmf-dist/tex/generic/babel/babel.sty
+Package: babel 2020/07/13 3.47 The Babel package
+
+(/usr/share/texlive/texmf-dist/tex/generic/babel/babel.def
+File: babel.def 2020/07/13 3.47 Babel common definitions
+\babel@savecnt=\count312
+\U@D=\dimen191
+\l@babelnohyphens=\language9
+
+(/usr/share/texlive/texmf-dist/tex/generic/babel/txtbabel.def)
+\bbl@readstream=\read2
+)
+\bbl@dirlevel=\count313
+
+(/usr/share/texlive/texmf-dist/tex/generic/babel-french/french.ldf
+Language: french 2020/07/02 v3.5j French support from the babel system
+Package babel Info: \l@acadian = using hyphenrules for french
+(babel)             (\language8) on input line 91.
+Package babel Info: \l@canadien = using hyphenrules for french
+(babel)             (\language8) on input line 92.
+\FB@nonchar=\count314
+Package babel Info: Making : an active character on input line 428.
+Package babel Info: Making ; an active character on input line 429.
+Package babel Info: Making ! an active character on input line 430.
+Package babel Info: Making ? an active character on input line 431.
+\FBguill@level=\count315
+\FBold@everypar=\toks41
+\FB@Mht=\dimen192
+\mc@charclass=\count316
+\mc@charfam=\count317
+\mc@charslot=\count318
+\std@mcc=\count319
+\dec@mcc=\count320
+\c@FBcaption@count=\count321
+\listindentFB=\dimen193
+\descindentFB=\dimen194
+\labelindentFB=\dimen195
+\labelwidthFB=\dimen196
+\leftmarginFB=\dimen197
+\parindentFFN=\dimen198
+\FBfnindent=\dimen199
+))
+(/usr/share/texlive/texmf-dist/tex/latex/carlisle/scalefnt.sty)
 (/usr/share/texlive/texmf-dist/tex/latex/doclicense/doclicense.sty
 Package: doclicense 2020/07/26 v2.1.0 Support for putting documents under a lic
 ense
@@ -554,15 +620,15 @@ Package: xifthen 2015/11/05 v1.4.0 Extended ifthen features
 
 (/usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty
 Package: calc 2017/05/25 v4.3 Infix arithmetic (KKT,FJ)
-\calc@Acount=\count311
-\calc@Bcount=\count312
-\calc@Adimen=\dimen191
-\calc@Bdimen=\dimen192
+\calc@Acount=\count322
+\calc@Bcount=\count323
+\calc@Adimen=\dimen256
+\calc@Bdimen=\dimen257
 \calc@Askip=\skip81
 \calc@Bskip=\skip82
 LaTeX Info: Redefining \setlength on input line 80.
 LaTeX Info: Redefining \addtolength on input line 81.
-\calc@Ccount=\count313
+\calc@Ccount=\count324
 \calc@Cskip=\skip83
 )
 (/usr/share/texlive/texmf-dist/tex/latex/ifmtarg/ifmtarg.sty
@@ -570,8 +636,8 @@ Package: ifmtarg 2018/04/16 v1.2b check for an empty argument
 ))
 (/usr/share/texlive/texmf-dist/tex/generic/xstring/xstring.sty
 (/usr/share/texlive/texmf-dist/tex/generic/xstring/xstring.tex
-\integerpart=\count314
-\decimalpart=\count315
+\integerpart=\count325
+\decimalpart=\count326
 )
 Package: xstring 2019/02/06 v1.83 String manipulations (CT)
 )
@@ -580,29 +646,127 @@ Package: xspace 2014/10/28 v1.13 Space after command names (DPC,MH)
 )
 (/usr/share/texlive/texmf-dist/tex/latex/tools/verbatim.sty
 Package: verbatim 2019/11/10 v1.5r LaTeX2e package for verbatim enhancements
-\every@verbatim=\toks36
-\verbatim@line=\toks37
-\verbatim@in@stream=\read2
+\every@verbatim=\toks42
+\verbatim@line=\toks43
+\verbatim@in@stream=\read3
 )
 \doclicense@hsize=\skip84
 
-(/usr/share/texlive/texmf-dist/tex/latex/doclicense/doclicense-english.ldf
-File: doclicense-english.ldf 
+(/usr/share/texlive/texmf-dist/tex/latex/doclicense/doclicense-french.ldf
+File: doclicense-french.ldf 
 ))
-\c@theorem=\count316
-\c@example=\count317
-\c@remark=\count318
-\c@definition=\count319
+(/usr/share/texlive/texmf-dist/tex/latex/minted/minted.sty
+Package: minted 2017/07/19 v2.5 Yet another Pygments shim for LaTeX
 
+(/usr/share/texlive/texmf-dist/tex/latex/fvextra/fvextra.sty
+Package: fvextra 2019/02/04 v1.4 fvextra - extensions and patches for fancyvrb
+
+(/usr/share/texlive/texmf-dist/tex/latex/fancyvrb/fancyvrb.sty
+Package: fancyvrb 2020/05/03 v3.6 verbatim text (tvz,hv)
+\FV@CodeLineNo=\count327
+\FV@InFile=\read4
+\FV@TabBox=\box64
+\c@FancyVerbLine=\count328
+\FV@StepNumber=\count329
+\FV@OutFile=\write3
+)
+(/usr/share/texlive/texmf-dist/tex/latex/upquote/upquote.sty
+Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verba
+tim
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/textcomp.sty
+Package: textcomp 2020/02/02 v2.0n Standard LaTeX package
+))
+(/usr/share/texlive/texmf-dist/tex/latex/lineno/lineno.sty
+Package: lineno 2005/11/02 line numbers on paragraphs v4.41
+\linenopenalty=\count330
+\output=\toks44
+\linenoprevgraf=\count331
+\linenumbersep=\dimen258
+\linenumberwidth=\dimen259
+\c@linenumber=\count332
+\c@pagewiselinenumber=\count333
+\c@LN@truepage=\count334
+\c@internallinenumber=\count335
+\c@internallinenumbers=\count336
+\quotelinenumbersep=\dimen260
+\bframerule=\dimen261
+\bframesep=\dimen262
+\bframebox=\box65
+LaTeX Info: Redefining \\ on input line 3056.
+)
+\c@FV@TrueTabGroupLevel=\count337
+\c@FV@TrueTabCounter=\count338
+\FV@TabBox@Group=\box66
+\FV@TmpLength=\skip85
+\c@FV@HighlightLinesStart=\count339
+\c@FV@HighlightLinesStop=\count340
+\FV@LoopCount=\count341
+\FV@NCharsBox=\box67
+\FV@BreakIndent=\dimen263
+\FV@BreakIndentNChars=\count342
+\FV@BreakSymbolSepLeft=\dimen264
+\FV@BreakSymbolSepLeftNChars=\count343
+\FV@BreakSymbolSepRight=\dimen265
+\FV@BreakSymbolSepRightNChars=\count344
+\FV@BreakSymbolIndentLeft=\dimen266
+\FV@BreakSymbolIndentLeftNChars=\count345
+\FV@BreakSymbolIndentRight=\dimen267
+\FV@BreakSymbolIndentRightNChars=\count346
+\c@FancyVerbLineBreakLast=\count347
+\FV@LineBox=\box68
+\FV@LineIndentBox=\box69
+\FV@LineWidth=\dimen268
+)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/shellesc.sty
+Package: shellesc 2019/11/08 v1.0c unified shell escape interface for LaTeX
+Package shellesc Info: Unrestricted shell escape enabled on input line 75.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/ifplatform/ifplatform.sty
+Package: ifplatform 2017/10/13 v0.4a Testing for the operating system
+
+(/usr/share/texlive/texmf-dist/tex/generic/catchfile/catchfile.sty
+Package: catchfile 2019/12/09 v1.8 Catch the contents of a file (HO)
+)
+runsystem(uname -s > "oup-authoring-template.w18")...executed.
+
+
+(./oup-authoring-template.w18)
+runsystem(rm -- "oup-authoring-template.w18")...executed.
+
+)
+(/usr/share/texlive/texmf-dist/tex/latex/framed/framed.sty
+Package: framed 2011/10/22 v 0.96: framed or shaded text with page breaks
+\OuterFrameSep=\skip86
+\fb@frw=\dimen269
+\fb@frh=\dimen270
+\FrameRule=\dimen271
+\FrameSep=\dimen272
+)
+\minted@appexistsfile=\read5
+\minted@bgbox=\box70
+\minted@code=\write4
+\c@minted@FancyVerbLineTemp=\count348
+\c@minted@pygmentizecounter=\count349
+\@float@every@listing=\toks45
+\c@listing=\count350
+)
+runsystem(mkdir -p _minted-oup-authoring-template)...executed.
+
+\c@theorem=\count351
+\c@example=\count352
+\c@remark=\count353
+\c@definition=\count354
+ (./def.tex)
 (/usr/share/texlive/texmf-dist/tex/latex/csquotes/csquotes.sty
 Package: csquotes 2019-12-06 v5.2j context-sensitive quotations (JAW)
-\csq@reset=\count320
-\csq@gtype=\count321
-\csq@glevel=\count322
-\csq@qlevel=\count323
-\csq@maxlvl=\count324
-\csq@tshold=\count325
-\csq@ltx@everypar=\toks38
+\csq@reset=\count355
+\csq@gtype=\count356
+\csq@glevel=\count357
+\csq@qlevel=\count358
+\csq@maxlvl=\count359
+\csq@tshold=\count360
+\csq@ltx@everypar=\toks46
 
 (/usr/share/texlive/texmf-dist/tex/latex/csquotes/csquotes.def
 File: csquotes.def 2019-12-06 v5.2j csquotes generic definitions (JAW)
@@ -621,50 +785,64 @@ Package: xkeyval 2014/12/03 v2.7a package option processing (HA)
 
 (/usr/share/texlive/texmf-dist/tex/generic/xkeyval/xkeyval.tex
 (/usr/share/texlive/texmf-dist/tex/generic/xkeyval/xkvutils.tex
-\XKV@toks=\toks39
-\XKV@tempa@toks=\toks40
+\XKV@toks=\toks47
+\XKV@tempa@toks=\toks48
 )
-\XKV@depth=\count326
+\XKV@depth=\count361
 File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
 )))
+runsystem(which pygmentize && touch oup-authoring-template.aex)...executed.
+
+runsystem(rm oup-authoring-template.aex)...executed.
+
+
 (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdfmode.def
 File: l3backend-pdfmode.def 2020-06-29 L3 backend support: PDF mode
-\l__kernel_color_stack_int=\count327
-\l__pdf_internal_box=\box64
+\l__kernel_color_stack_int=\count362
+\l__pdf_internal_box=\box71
 )
-(./oup-authoring-template.aux)
+(./oup-authoring-template.aux
+
+LaTeX Warning: Label `eq:defmacro' multiply defined.
+
+
+LaTeX Warning: Label `eq:f6zh' multiply defined.
+
+
+LaTeX Warning: Label `eq:defmeso' multiply defined.
+
+)
 \openout1 = `oup-authoring-template.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 47.
-LaTeX Font Info:    ... okay on input line 47.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 47.
-LaTeX Font Info:    ... okay on input line 47.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 47.
-LaTeX Font Info:    ... okay on input line 47.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 47.
-LaTeX Font Info:    ... okay on input line 47.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 47.
-LaTeX Font Info:    ... okay on input line 47.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 47.
-LaTeX Font Info:    ... okay on input line 47.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 47.
-LaTeX Font Info:    ... okay on input line 47.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 47.
-LaTeX Font Info:    ... okay on input line 47.
-
-(/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 49.
+LaTeX Font Info:    ... okay on input line 49.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 49.
+LaTeX Font Info:    ... okay on input line 49.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 49.
+LaTeX Font Info:    ... okay on input line 49.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 49.
+LaTeX Font Info:    ... okay on input line 49.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 49.
+LaTeX Font Info:    ... okay on input line 49.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 49.
+LaTeX Font Info:    ... okay on input line 49.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 49.
+LaTeX Font Info:    ... okay on input line 49.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 49.
+LaTeX Font Info:    ... okay on input line 49.
+ (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count328
-\scratchdimen=\dimen193
-\scratchbox=\box65
-\nofMPsegments=\count329
-\nofMParguments=\count330
-\everyMPshowfont=\toks41
-\MPscratchCnt=\count331
-\MPscratchDim=\dimen194
-\MPnumerator=\count332
-\makeMPintoPDFobject=\count333
-\everyMPtoPDFconversion=\toks42
+\scratchcounter=\count363
+\scratchdimen=\dimen273
+\scratchbox=\box72
+\nofMPsegments=\count364
+\nofMParguments=\count365
+\everyMPshowfont=\toks49
+\MPscratchCnt=\count366
+\MPscratchDim=\dimen274
+\MPnumerator=\count367
+\makeMPintoPDFobject=\count368
+\everyMPtoPDFconversion=\toks50
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
@@ -674,9 +852,9 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-Package crop Info: requested driver: `' on input line 47.
-Package crop Info: detected driver: `pdftex' on input line 47.
-Package crop Info: using `pdftex' graphics driver on input line 47.
+Package crop Info: requested driver: `' on input line 49.
+Package crop Info: detected driver: `pdftex' on input line 49.
+Package crop Info: using `pdftex' graphics driver on input line 49.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: float package is loaded.
@@ -685,14 +863,14 @@ Package caption Info: listings package is loaded.
 Package caption Info: rotating package is loaded.
 Package caption Info: wrapfig package is loaded.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Redeclaring symbol font `AMSa' on input line 47.
+LaTeX Font Info:    Redeclaring symbol font `AMSa' on input line 49.
 LaTeX Font Info:    Overwriting symbol font `AMSa' in version `normal'
-(Font)                  U/msa/m/n --> U/msa/m/n on input line 47.
+(Font)                  U/msa/m/n --> U/msa/m/n on input line 49.
 LaTeX Font Info:    Overwriting symbol font `AMSa' in version `bold'
-(Font)                  U/msa/m/n --> U/msa/m/n on input line 47.
-\c@lstlisting=\count334
-\AtBeginShipoutBox=\box66
-Package hyperref Info: Link coloring OFF on input line 47.
+(Font)                  U/msa/m/n --> U/msa/m/n on input line 49.
+\c@lstlisting=\count369
+\AtBeginShipoutBox=\box73
+Package hyperref Info: Link coloring OFF on input line 49.
 
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
@@ -703,193 +881,687 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 (/usr/share/texlive/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count335
+\c@section@level=\count370
 )
-LaTeX Info: Redefining \ref on input line 47.
-LaTeX Info: Redefining \pageref on input line 47.
-LaTeX Info: Redefining \nameref on input line 47.
+LaTeX Info: Redefining \ref on input line 49.
+LaTeX Info: Redefining \pageref on input line 49.
+LaTeX Info: Redefining \nameref on input line 49.
 
 (./oup-authoring-template.out) (./oup-authoring-template.out)
-\@outlinefile=\write3
-\openout3 = `oup-authoring-template.out'.
+\@outlinefile=\write5
+\openout5 = `oup-authoring-template.out'.
 
-<Fig/logo.jpg, id=8, 1629.08624pt x 654.445pt>
+
+(/usr/share/texlive/texmf-dist/tex/latex/ucs/ucsencs.def
+File: ucsencs.def 2011/01/21 Fixes to fontencodings LGR, T3
+)
+LaTeX Info: Redefining \degres on input line 49.
+
+
+Package french.ldf Warning: Figures' and tables' captions might look like
+(french.ldf)                `Figure 1:' in French instead of `Figure 1 :'.
+(french.ldf)                If you have loaded any of the packages caption,
+(french.ldf)                subcaption or floatrow BEFORE babel/french,
+(french.ldf)                please move them AFTER babel/french.
+(french.ldf)                If one of them is loaded by your class,
+(french.ldf)                you can still add AFTER babel/french
+(french.ldf)                \usepackage[labelsep=period]{caption} or
+(french.ldf)                \usepackage[labelsep=endash]{caption} or
+(french.ldf)                ... live with it; reported on input line 49.
+
+LaTeX Info: Redefining \dots on input line 49.
+
+Package french.ldf Warning: Please load the "listings" package
+(french.ldf)                AFTER babel/french; reported on input line 49.
+
+LaTeX Info: Redefining \up on input line 49.
+<Fig/logo.jpg, id=88, 1629.08624pt x 654.445pt>
 File: Fig/logo.jpg Graphic file (type jpg)
 <use Fig/logo.jpg>
-Package pdftex.def Info: Fig/logo.jpg  used on input line 103.
+Package pdftex.def Info: Fig/logo.jpg  used on input line 75.
 (pdftex.def)             Requested size: 137.0pt x 55.03291pt.
-
-Overfull \hbox (13.5pt too wide) in paragraph at lines 103--103
+(/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-0.def
+File: uni-0.def 2013/05/13 UCS: Unicode data U+0000..U+00FF
+)
+Overfull \hbox (13.5pt too wide) in paragraph at lines 75--75
 | [][][] 
  []
 
 
-Overfull \hbox (13.5pt too wide) in paragraph at lines 103--103
+Overfull \hbox (13.5pt too wide) in paragraph at lines 75--75
 | [][][] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 103--103
+Underfull \hbox (badness 10000) in paragraph at lines 75--75
 
  []
 
 
-Overfull \hbox (64.5pt too wide) detected at line 103
+Overfull \hbox (64.5pt too wide) detected at line 75
 [] []
  []
 
 
 LaTeX Warning: No \author given.
 
-LaTeX Font Info:    Calculating math sizes for size <13.04874> on input line 10
-3.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 103
+LaTeX Font Info:    Calculating math sizes for size <13.04874> on input line 75
 .
+LaTeX Font Info:    Trying to load font information for U+msa on input line 75.
+
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 103
-.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 75.
+
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Trying to load font information for U+rsfs on input line 10
-3.
+LaTeX Font Info:    Trying to load font information for U+rsfs on input line 75
+.
 
 (/usr/share/texlive/texmf-dist/tex/latex/jknapltx/ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 )
 
 LaTeX Font Warning: Font shape `U/rsfs/m/n' in size <13.04874> not available
-(Font)              size <12> substituted on input line 103.
+(Font)              size <12> substituted on input line 75.
 
 
 LaTeX Font Warning: Font shape `U/rsfs/m/n' in size <6.52437> not available
-(Font)              size <7> substituted on input line 103.
+(Font)              size <7> substituted on input line 75.
 
-LaTeX Font Info:    Calculating math sizes for size <9.13406> on input line 103
-.
+LaTeX Font Info:    Calculating math sizes for size <9.13406> on input line 75.
+
 
 LaTeX Font Warning: Font shape `U/rsfs/m/n' in size <4.56703> not available
-(Font)              size <5> substituted on input line 103.
+(Font)              size <5> substituted on input line 75.
 
-LaTeX Font Info:    Calculating math sizes for size <7.52812> on input line 103
-.
+LaTeX Font Info:    Calculating math sizes for size <7.52812> on input line 75.
+
 
 LaTeX Font Warning: Font shape `U/rsfs/m/n' in size <7.52812> not available
-(Font)              size <8> substituted on input line 103.
+(Font)              size <8> substituted on input line 75.
 
 
 LaTeX Font Warning: Font shape `U/rsfs/m/n' in size <3.76405> not available
-(Font)              size <5> substituted on input line 103.
+(Font)              size <5> substituted on input line 75.
 
-LaTeX Font Info:    Calculating math sizes for size <6.52437> on input line 103
-.
+LaTeX Font Info:    Calculating math sizes for size <6.52437> on input line 75.
+
 
 LaTeX Font Warning: Font shape `U/rsfs/m/n' in size <3.26218> not available
-(Font)              size <5> substituted on input line 103.
+(Font)              size <5> substituted on input line 75.
 
-LaTeX Font Info:    Calculating math sizes for size <4.56703> on input line 103
-.
+LaTeX Font Info:    Calculating math sizes for size <4.56703> on input line 75.
+
 
 LaTeX Font Warning: Font shape `U/rsfs/m/n' in size <3.1969> not available
-(Font)              size <5> substituted on input line 103.
+(Font)              size <5> substituted on input line 75.
 
 
 LaTeX Font Warning: Font shape `U/rsfs/m/n' in size <2.28351> not available
-(Font)              size <5> substituted on input line 103.
+(Font)              size <5> substituted on input line 75.
 
 
-Overfull \hbox (53.5pt too wide) in paragraph at lines 103--103
+Overfull \hbox (53.5pt too wide) in paragraph at lines 75--75
 [][][] 
  []
 
-
-Overfull \hbox (53.5pt too wide) in paragraph at lines 103--103
+(./abstract.tex)
+Overfull \hbox (53.5pt too wide) in paragraph at lines 75--75
 [][][]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 103--103
+Underfull \hbox (badness 10000) in paragraph at lines 75--75
 
  []
 
-<Fig/LBMocc.pdf, id=12, 462.52798pt x 346.89601pt>
-File: Fig/LBMocc.pdf Graphic file (type pdf)
-<use Fig/LBMocc.pdf>
-Package pdftex.def Info: Fig/LBMocc.pdf  used on input line 107.
+(./intro.tex (/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-1.def
+File: uni-1.def 2013/05/13 UCS: Unicode data U+0100..U+01FF
+)
+<Fig/LBM.pdf, id=104, 462.52798pt x 346.89601pt>
+File: Fig/LBM.pdf Graphic file (type pdf)
+<use Fig/LBM.pdf>
+Package pdftex.def Info: Fig/LBM.pdf  used on input line 30.
 (pdftex.def)             Requested size: 235.25pt x 176.43823pt.
 
-Underfull \hbox (badness 2426) in paragraph at lines 109--109
-\OT1/cmr/bx/n/6.02249 Fig. 1. \OT1/cmr/m/n/6.02249 Nombres de publications poss
-^^Redent l'occurrence "Lattice
- []
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-- LAST -
-Extra skip:214.63826pt
-Left:224.63826pt/0.0pt
-Right:10.0pt/0.0pt
-Output:127.31912pt
-<doclicense-CC-by-nc-sa-88x31.pdf, id=14, 90.3375pt x 31.61812pt>
-File: doclicense-CC-by-nc-sa-88x31.pdf Graphic file (type pdf)
-<use doclicense-CC-by-nc-sa-88x31.pdf>
-Package pdftex.def Info: doclicense-CC-by-nc-sa-88x31.pdf  used on input line 1
-15.
-(pdftex.def)             Requested size: 79.44351pt x 27.80519pt.
-[1
+<Fig/CFD.pdf, id=106, 462.52798pt x 346.89601pt>
+File: Fig/CFD.pdf Graphic file (type pdf)
+<use Fig/CFD.pdf>
+Package pdftex.def Info: Fig/CFD.pdf  used on input line 38.
+(pdftex.def)             Requested size: 235.25pt x 176.43823pt.
+<doclicense-CC-by-nc-sa-eu-88x31.pdf, id=109, 90.3375pt x 31.61812pt>
+File: doclicense-CC-by-nc-sa-eu-88x31.pdf Graphic file (type pdf)
+<use doclicense-CC-by-nc-sa-eu-88x31.pdf>
+Package pdftex.def Info: doclicense-CC-by-nc-sa-eu-88x31.pdf  used on input lin
+e 42.
+(pdftex.def)             Requested size: 79.42505pt x 27.79892pt.
+ [1
 Non-PDF special ignored!
 <special> ps: [{ThisPage} << /CropBox [0 0 595.26013 782.33696] >> /PUT pdf...
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
 
- <./Fig/logo.jpg> <./Fig/LBMocc.pdf> </usr/share/texlive/texmf-dist/tex/latex/d
-oclicense/images/doclicense-CC-by-nc-sa-88x31.pdf
+ <./Fig/logo.jpg> <./Fig/LBM.pdf> </usr/share/texlive/texmf-dist/tex/latex/docl
+icense/images/doclicense-CC-by-nc-sa-eu-88x31.pdf
 
 pdfTeX warning: /usr/bin/pdflatex (file /usr/share/texlive/texmf-dist/tex/latex
-/doclicense/images/doclicense-CC-by-nc-sa-88x31.pdf): PDF inclusion: multiple p
+/doclicense/images/doclicense-CC-by-nc-sa-eu-88x31.pdf): PDF inclusion: multipl
+e pdfs with page group included in a single page
+>]
+<Fig/LBMoCFD.pdf, id=160, 462.52798pt x 346.89601pt>
+File: Fig/LBMoCFD.pdf Graphic file (type pdf)
+<use Fig/LBMoCFD.pdf>
+Package pdftex.def Info: Fig/LBMoCFD.pdf  used on input line 46.
+(pdftex.def)             Requested size: 235.25pt x 176.43823pt.
+
+Underfull \hbox (badness 2671) in paragraph at lines 67--72
+\T1/cmr/m/it/7.52812 Les LBM contrai-re-ment a d'autres mé-thodes plus
+ []
+
+) (./Fdes.tex)
+Overfull \hbox (253.25pt too wide) has occurred while \output is active
+[][][][] 
+ []
+
+
+Overfull \vbox (1.0pt too high) has occurred while \output is active []
+
+ [2
+Non-PDF special ignored!
+<special> ps: [{ThisPage} << /CropBox [0 0 595.26013 782.33696] >> /PUT pdf...
+ <./Fig/CFD.pdf> <./Fig/LBMoCFD.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./Fig/LBMoCFD.pdf): PDF inclusion: mult
+iple pdfs with page group included in a single page
+>] (./Defq.tex
+Underfull \hbox (badness 10000) in paragraph at lines 12--14
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 16--19
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 21--24
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 26--29
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 31--33
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 45--47
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 49--53
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 55--61
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 61--64
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 66--69
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 71--73
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 81--83
+
+ []
+
+
+Overfull \hbox (253.25pt too wide) has occurred while \output is active
+[][][][] 
+ []
+
+
+Overfull \vbox (1.0pt too high) has occurred while \output is active []
+
+ [3
+Non-PDF special ignored!
+<special> ps: [{ThisPage} << /CropBox [0 0 595.26013 782.33696] >> /PUT pdf...
+]
+Underfull \hbox (badness 10000) in paragraph at lines 85--87
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 89--92
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 94--98
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 100--102
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 104--106
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 108--110
+
+ []
+
+)
+LaTeX Font Info:    Calculating math sizes for size <10.03749> on input line 85
+.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 85.
+
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 85.
+
+(./DiscD2Q9.tex
+<Fig/ei.pdf, id=234, 462.52798pt x 346.89601pt>
+File: Fig/ei.pdf Graphic file (type pdf)
+<use Fig/ei.pdf>
+Package pdftex.def Info: Fig/ei.pdf  used on input line 13.
+(pdftex.def)             Requested size: 235.25pt x 176.43823pt.
+LaTeX Font Info:    Calculating math sizes for size <6.02249> on input line 14.
+
+
+
+LaTeX Font Warning: Font shape `U/rsfs/m/n' in size <4.21571> not available
+(Font)              size <5> substituted on input line 14.
+
+
+LaTeX Font Warning: Font shape `U/rsfs/m/n' in size <3.01125> not available
+(Font)              size <5> substituted on input line 14.
+
+
+Overfull \hbox (253.25pt too wide) has occurred while \output is active
+[][][][] 
+ []
+
+
+Overfull \vbox (1.0pt too high) has occurred while \output is active []
+
+ [4
+Non-PDF special ignored!
+<special> ps: [{ThisPage} << /CropBox [0 0 595.26013 782.33696] >> /PUT pdf...
+ <./Fig/ei.pdf>]) (./DiscB.tex) (./Bc.tex
+<periodic.pdf, id=281, 462.52798pt x 346.89601pt>
+File: periodic.pdf Graphic file (type pdf)
+<use periodic.pdf>
+Package pdftex.def Info: periodic.pdf  used on input line 14.
+(pdftex.def)             Requested size: 235.25pt x 176.43823pt.
+<iolet.pdf, id=284, 462.52798pt x 346.89601pt>
+File: iolet.pdf Graphic file (type pdf)
+<use iolet.pdf>
+Package pdftex.def Info: iolet.pdf  used on input line 38.
+(pdftex.def)             Requested size: 235.25pt x 176.43823pt.
+
+Overfull \hbox (253.25pt too wide) has occurred while \output is active
+[][][][] 
+ []
+
+
+Overfull \vbox (1.0pt too high) has occurred while \output is active []
+
+ [5
+Non-PDF special ignored!
+<special> ps: [{ThisPage} << /CropBox [0 0 595.26013 782.33696] >> /PUT pdf...
+ <./periodic.pdf> <./iolet.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./iolet.pdf): PDF inclusion: multiple p
 dfs with page group included in a single page
 >]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 115.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 115.
+<Fig/collide.pdf, id=359, 2837.60126pt x 703.62875pt>
+File: Fig/collide.pdf Graphic file (type pdf)
+<use Fig/collide.pdf>
+Package pdftex.def Info: Fig/collide.pdf  used on input line 153.
+(pdftex.def)             Requested size: 235.25pt x 58.33138pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Overfull \hbox (253.25pt too wide) has occurred while \output is active
+[][][][] 
+ []
+
+
+Overfull \vbox (1.0pt too high) has occurred while \output is active []
+
+ [6
+Non-PDF special ignored!
+<special> ps: [{ThisPage} << /CropBox [0 0 595.26013 782.33696] >> /PUT pdf...
+]) (./Al&i.tex
+<Fig/algorithme.pdf, id=388, 4743.7225pt x 1816.7875pt>
+File: Fig/algorithme.pdf Graphic file (type pdf)
+<use Fig/algorithme.pdf>
+Package pdftex.def Info: Fig/algorithme.pdf  used on input line 15.
+(pdftex.def)             Requested size: 235.25pt x 90.0962pt.
+\openout3 = `oup-authoring-template.pyg'.
+
+ (./_minted-oup-authoring-template/default-pyg-prefix.pygstyle)
+(./_minted-oup-authoring-template/default.pygstyle)
+(./_minted-oup-authoring-template/7619E291DB4D503E630E611566188218F421A8851BC68
+C59FF12E7BCDAA1A35C.pygtex
+
+LaTeX Font Warning: Font shape `T1/cmtt/bx/n' in size <7.52812> not available
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 5.
+
+)
+\openout3 = `oup-authoring-template.pyg'.
+
+
+(./_minted-oup-authoring-template/B53115019D108DC7FB6EABAB9EAA4F4EF421A8851BC68
+C59FF12E7BCDAA1A35C.pygtex)) (./results.tex
+Overfull \hbox (253.25pt too wide) has occurred while \output is active
+[][][][] 
+ []
+
+
+Overfull \vbox (1.0pt too high) has occurred while \output is active []
+
+ [7
+Non-PDF special ignored!
+<special> ps: [{ThisPage} << /CropBox [0 0 595.26013 782.33696] >> /PUT pdf...
+ <./Fig/collide.pdf> <./Fig/algorithme.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./Fig/algorithme.pdf): PDF inclusion: m
+ultiple pdfs with page group included in a single page
+>]
+<Fig/Poiseuille.png, id=441, 1084.05pt x 1084.05pt>
+File: Fig/Poiseuille.png Graphic file (type png)
+<use Fig/Poiseuille.png>
+Package pdftex.def Info: Fig/Poiseuille.png  used on input line 27.
+(pdftex.def)             Requested size: 235.25pt x 235.24965pt.
+<Fig/Poiseuille2.png, id=442, 1084.05pt x 1084.05pt>
+File: Fig/Poiseuille2.png Graphic file (type png)
+<use Fig/Poiseuille2.png>
+Package pdftex.def Info: Fig/Poiseuille2.png  used on input line 35.
+(pdftex.def)             Requested size: 235.25pt x 235.24965pt.
+<Fig/Poiseuille3.png, id=443, 1084.05pt x 1084.05pt>
+File: Fig/Poiseuille3.png Graphic file (type png)
+<use Fig/Poiseuille3.png>
+Package pdftex.def Info: Fig/Poiseuille3.png  used on input line 41.
+(pdftex.def)             Requested size: 235.25pt x 235.24965pt.
+<Fig/CF.png, id=447, 1084.05pt x 1084.05pt>
+File: Fig/CF.png Graphic file (type png)
+<use Fig/CF.png>
+Package pdftex.def Info: Fig/CF.png  used on input line 53.
+(pdftex.def)             Requested size: 235.25pt x 235.24965pt.
+) (./results2.tex
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Overfull \hbox (253.25pt too wide) has occurred while \output is active
+[][][][] 
+ []
+
+
+Overfull \vbox (1.0pt too high) has occurred while \output is active []
+
+ [8
+Non-PDF special ignored!
+<special> ps: [{ThisPage} << /CropBox [0 0 595.26013 782.33696] >> /PUT pdf...
+ <./Fig/Poiseuille.png (PNG copy)> <./Fig/Poiseuille2.png (PNG copy)> <./Fig/Po
+iseuille3.png (PNG copy)>]
+<Fig/VK.png, id=460, 1003.75pt x 1003.75pt>
+File: Fig/VK.png Graphic file (type png)
+<use Fig/VK.png>
+Package pdftex.def Info: Fig/VK.png  used on input line 5.
+(pdftex.def)             Requested size: 235.25pt x 235.238pt.
+) (./results3.tex
+<Fig/little_chaos.png, id=461, 1003.75pt x 1003.75pt>
+File: Fig/little_chaos.png Graphic file (type png)
+<use Fig/little_chaos.png>
+Package pdftex.def Info: Fig/little_chaos.png  used on input line 6.
+(pdftex.def)             Requested size: 235.25pt x 235.238pt.
+<Fig/chaos.pdf, id=465, 903.375pt x 903.375pt>
+File: Fig/chaos.pdf Graphic file (type pdf)
+<use Fig/chaos.pdf>
+Package pdftex.def Info: Fig/chaos.pdf  used on input line 14.
+(pdftex.def)             Requested size: 235.25pt x 235.24414pt.
+) (./conclusion.tex)
+Overfull \hbox (253.25pt too wide) has occurred while \output is active
+[][][][] 
+ []
+
+
+Overfull \vbox (1.0pt too high) has occurred while \output is active []
+
+ [9
+Non-PDF special ignored!
+<special> ps: [{ThisPage} << /CropBox [0 0 595.26013 782.33696] >> /PUT pdf...
+ <./Fig/CF.png (PNG copy)> <./Fig/VK.png (PNG copy)> <./Fig/little_chaos.png (P
+NG copy)>] (./oup-authoring-template.bbl
+Underfull \hbox (badness 1742) in paragraph at lines 24--30
+\T1/cmr/m/n/7.52812 CONTRI-BU-TIONS TO MA-THE-MA-TICS, ME-TEO-RO-
+ []
+
+(/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-32.def
+File: uni-32.def 2013/05/13 UCS: Unicode data U+2000..U+20FF
+))
+Overfull \hbox (253.25pt too wide) has occurred while \output is active
+[][][][] 
+ []
+
+
+Overfull \vbox (1.0pt too high) has occurred while \output is active []
+
+ [10
+Non-PDF special ignored!
+<special> ps: [{ThisPage} << /CropBox [0 0 595.26013 782.33696] >> /PUT pdf...
+ <./Fig/chaos.pdf>]
+(./_minted-oup-authoring-template/0AA84E6AB28EE1D74DE03F8D9E4F896CFC95CC3B5D5DE
+448ADE2DD3BD8143BFA.pygtex
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Overfull \vbox (1.0pt too high) has occurred while \output is active []
+
+ [11
+Non-PDF special ignored!
+<special> ps: [{ThisPage} << /CropBox [0 0 595.26013 782.33696] >> /PUT pdf...
+
+]
+Overfull \vbox (1.0pt too high) has occurred while \output is active []
+
+ [12
+Non-PDF special ignored!
+<special> ps: [{ThisPage} << /CropBox [0 0 595.26013 782.33696] >> /PUT pdf...
+]
+Overfull \vbox (1.0pt too high) has occurred while \output is active []
+
+ [13
+Non-PDF special ignored!
+<special> ps: [{ThisPage} << /CropBox [0 0 595.26013 782.33696] >> /PUT pdf...
+]
+Overfull \vbox (1.0pt too high) has occurred while \output is active []
+
+ [14
+Non-PDF special ignored!
+<special> ps: [{ThisPage} << /CropBox [0 0 595.26013 782.33696] >> /PUT pdf...
+]
+Overfull \vbox (1.0pt too high) has occurred while \output is active []
+
+ [15
+Non-PDF special ignored!
+<special> ps: [{ThisPage} << /CropBox [0 0 595.26013 782.33696] >> /PUT pdf...
+]
+Overfull \vbox (1.0pt too high) has occurred while \output is active []
+
+ [16
+Non-PDF special ignored!
+<special> ps: [{ThisPage} << /CropBox [0 0 595.26013 782.33696] >> /PUT pdf...
+]
+Overfull \vbox (1.0pt too high) has occurred while \output is active []
+
+ [17
+Non-PDF special ignored!
+<special> ps: [{ThisPage} << /CropBox [0 0 595.26013 782.33696] >> /PUT pdf...
+])
+Overfull \vbox (1.0pt too high) has occurred while \output is active []
+
+ [18
+Non-PDF special ignored!
+<special> ps: [{ThisPage} << /CropBox [0 0 595.26013 782.33696] >> /PUT pdf...
+]
+(./_minted-oup-authoring-template/0BDEC0AC5A3BF365C3B734FF8B06CDD0D1A32696D52FB
+0668ACFEC8E73A250D5.pygtex)
+Overfull \vbox (1.0pt too high) has occurred while \output is active []
+
+ [19
+Non-PDF special ignored!
+<special> ps: [{ThisPage} << /CropBox [0 0 595.26013 782.33696] >> /PUT pdf...
+]
+(./_minted-oup-authoring-template/00638EE950692BA921942F9AB9F6D92FF73AA9F556CCC
+426D1787DC564577864.pygtex
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Overfull \vbox (1.0pt too high) has occurred while \output is active []
+
+ [20
+Non-PDF special ignored!
+<special> ps: [{ThisPage} << /CropBox [0 0 595.26013 782.33696] >> /PUT pdf...
+]
+Overfull \vbox (1.0pt too high) has occurred while \output is active []
+
+ [21
+Non-PDF special ignored!
+<special> ps: [{ThisPage} << /CropBox [0 0 595.26013 782.33696] >> /PUT pdf...
+])
+Overfull \vbox (1.0pt too high) has occurred while \output is active []
+
+ [22
+Non-PDF special ignored!
+<special> ps: [{ThisPage} << /CropBox [0 0 595.26013 782.33696] >> /PUT pdf...
+]
+(./_minted-oup-authoring-template/530D407942BE55D32FDC2BBFCAE0C3E0FC78FFFA351FB
+DE9C53E2815E3A4EB1C.pygtex
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Overfull \vbox (1.0pt too high) has occurred while \output is active []
+
+ [23
+Non-PDF special ignored!
+<special> ps: [{ThisPage} << /CropBox [0 0 595.26013 782.33696] >> /PUT pdf...
+])
+Overfull \vbox (1.0pt too high) has occurred while \output is active []
+
+ [24
+Non-PDF special ignored!
+<special> ps: [{ThisPage} << /CropBox [0 0 595.26013 782.33696] >> /PUT pdf...
+]
+(./_minted-oup-authoring-template/BA9661AEACFAAC6C3C5E67C7D8F9F7104F153A2A4CE6F
+8D6B6DD7F88D4D24DB7.pygtex)
+Overfull \vbox (1.0pt too high) has occurred while \output is active []
+
+ [25
+Non-PDF special ignored!
+<special> ps: [{ThisPage} << /CropBox [0 0 595.26013 782.33696] >> /PUT pdf...
+]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 148.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 148.
  (./oup-authoring-template.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 115.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 115.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 148.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 148.
 Package rerunfilecheck Info: File `oup-authoring-template.out' has not changed.
 
-(rerunfilecheck)             Checksum: A02D95553E30B97FF125B1AA17CF9044;47.
+(rerunfilecheck)             Checksum: 17033D76AFD50A847BAC9AED4F03DD2E;1480.
 
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 2.71649pt have occurred.
 
+
+LaTeX Warning: There were multiply-defined labels.
+
+runsystem(rm oup-authoring-template.pyg)...executed.
+
  ) 
 Here is how much of TeX's memory you used:
- 13265 strings out of 482752
- 200076 string characters out of 5954029
- 512218 words of memory out of 5000000
- 28327 multiletter control sequences out of 15000+600000
- 559816 words of font info for 123 fonts, out of 8000000 for 9000
+ 19445 strings out of 482752
+ 306172 string characters out of 5954029
+ 674725 words of memory out of 5000000
+ 34176 multiletter control sequences out of 15000+600000
+ 590606 words of font info for 182 fonts, out of 8000000 for 9000
  63 hyphenation exceptions out of 8191
- 51i,11n,57p,17365b,533s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmb10.pfb></usr
-/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbsy10.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texl
-ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx6.pfb></usr/share/texlive/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb></usr/share/texlive/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texlive/texmf-dist/font
-s/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1
-/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9
-.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></
-usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti8.pfb></usr/sha
-re/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb>
-Output written on oup-authoring-template.pdf (1 page, 1299877 bytes).
+ 51i,11n,59p,17365b,732s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}{/usr/share/texmf
+/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texlive/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmbsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1
+/public/amsfonts/cmextra/cmex8.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+mi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb
+></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/s
+hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/tex
+live/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/share/texlive/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
+mathpazo/fplmri.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/
+symbols/msam7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/sy
+mbols/msbm7.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx0600.pfb></us
+r/share/texmf/fonts/type1/public/cm-super/sfbx0700.pfb></usr/share/texmf/fonts/
+type1/public/cm-super/sfbx0800.pfb></usr/share/texmf/fonts/type1/public/cm-supe
+r/sfbx1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfcc0700.pfb></usr
+/share/texmf/fonts/type1/public/cm-super/sfcc1000.pfb></usr/share/texmf/fonts/t
+ype1/public/cm-super/sfcc1728.pfb></usr/share/texmf/fonts/type1/public/cm-super
+/sfit0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrb1000.pfb></usr/
+share/texmf/fonts/type1/public/cm-super/sfrm0500.pfb></usr/share/texmf/fonts/ty
+pe1/public/cm-super/sfrm0600.pfb></usr/share/texmf/fonts/type1/public/cm-super/
+sfrm0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800.pfb></usr/s
+hare/texmf/fonts/type1/public/cm-super/sfrm0900.pfb></usr/share/texmf/fonts/typ
+e1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super/s
+fti0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti0800.pfb></usr/sh
+are/texmf/fonts/type1/public/cm-super/sftt0800.pfb></usr/share/texmf/fonts/type
+1/public/cm-super/sfxc0600.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/p
+alatino/uplr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr
+i8a.pfb>
+Output written on oup-authoring-template.pdf (25 pages, 4646046 bytes).
 PDF statistics:
- 91 PDF objects out of 1000 (max. 8388607)
- 68 compressed objects within 1 object stream
- 6 named destinations out of 1000 (max. 500000)
- 24 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 730 PDF objects out of 1000 (max. 8388607)
+ 620 compressed objects within 7 object streams
+ 149 named destinations out of 1000 (max. 500000)
+ 254 words of extra memory for PDF output out of 10000 (max. 10000000)
 

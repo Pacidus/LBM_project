@@ -1,0 +1,479 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c}{! Author : Pacidus}
+\PYG{c}{! Started at: 31.10.2020 00:17:57}
+
+\PYG{c}{!===============================================================================}
+\PYG{c}{!                               Fluid Constants.}
+\PYG{c}{!===============================================================================}
+\PYG{k}{Module }\PYG{n}{Fconst}
+  \PYG{k}{Implicit None}
+\PYG{k}{  }\PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{),} \PYG{k}{Parameter} \PYG{k+kd}{::} \PYG{n}{cs}  \PYG{o}{=} \PYG{l+m+mf}{3.4d2}         \PYG{c}{! m·s⁻¹   Speed of sound}
+  \PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{),} \PYG{k}{Parameter} \PYG{k+kd}{::} \PYG{n}{rho} \PYG{o}{=} \PYG{l+m+mf}{1.177d0}       \PYG{c}{! kg·m⁻³  Fluid density}
+  \PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{),} \PYG{k}{Parameter} \PYG{k+kd}{::} \PYG{n}{nu}  \PYG{o}{=} \PYG{p}{.}\PYG{l+m+mi}{001}          \PYG{c}{! m²·s⁻¹  Kinematic viscosity}
+\PYG{k}{End Module }\PYG{n}{Fconst}
+
+
+\PYG{c}{!===============================================================================}
+\PYG{c}{!                            Simulation Constants.}
+\PYG{c}{!===============================================================================}
+\PYG{k}{Module }\PYG{n}{Sconst}
+  \PYG{k}{Implicit None}
+\PYG{k}{  }\PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{),} \PYG{k}{Parameter} \PYG{k+kd}{::} \PYG{n}{lx}  \PYG{o}{=} \PYG{l+m+mi}{4}\PYG{n}{d0}           \PYG{c}{! m     Length of the box}
+  \PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{),} \PYG{k}{Parameter} \PYG{k+kd}{::} \PYG{n}{ly}  \PYG{o}{=} \PYG{l+m+mi}{2}\PYG{n}{d0}           \PYG{c}{! m     Height of the box}
+  \PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{),} \PYG{k}{Parameter} \PYG{k+kd}{::} \PYG{n}{t}   \PYG{o}{=} \PYG{l+m+mi}{5}\PYG{n}{d0}           \PYG{c}{! s     Total time of the simulation}
+  \PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{),} \PYG{k}{Parameter} \PYG{k+kd}{::} \PYG{n}{sp}  \PYG{o}{=} \PYG{l+m+mi}{10}\PYG{n}{d0}          \PYG{c}{! m·s⁻¹ Inlet Speed    }
+\PYG{k}{End Module }\PYG{n}{Sconst}
+
+
+\PYG{c}{!===============================================================================}
+\PYG{c}{!                         Discretisation Constants.}
+\PYG{c}{!===============================================================================}
+\PYG{k}{Module }\PYG{n}{Dconst}
+  \PYG{k}{Use }\PYG{n}{Fconst}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{cs}
+  \PYG{k}{Use }\PYG{n}{Sconst}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{lx}\PYG{p}{,} \PYG{n}{ly}\PYG{p}{,} \PYG{n}{t}
+  \PYG{k}{Implicit None}
+\PYG{k}{  }\PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{),} \PYG{k}{Parameter} \PYG{k+kd}{::} \PYG{n}{dt}    \PYG{o}{=} \PYG{l+m+mi}{12}\PYG{n}{d}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{6}\PYG{c}{!5     ! s Timestep}
+  \PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{),} \PYG{k}{Parameter} \PYG{k+kd}{::} \PYG{n}{sqrt3} \PYG{o}{=} \PYG{n+nb}{Dsqrt}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{n}{d0}\PYG{p}{)}  \PYG{c}{! ø       No reason except aesthetic}
+  \PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{),} \PYG{k}{Parameter} \PYG{k+kd}{::} \PYG{n}{c}     \PYG{o}{=} \PYG{n}{cs}\PYG{o}{*}\PYG{n}{sqrt3}    \PYG{c}{! m·s⁻¹   Lattice speed}
+  \PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{),} \PYG{k}{Parameter} \PYG{k+kd}{::} \PYG{n}{dl}    \PYG{o}{=} \PYG{n}{c}\PYG{o}{*}\PYG{n}{dt}        \PYG{c}{! m Spatial step}
+  \PYG{k+kt}{Integer}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{),} \PYG{k}{Parameter} \PYG{k+kd}{::} \PYG{n}{H}  \PYG{o}{=} \PYG{n+nb}{Int}\PYG{p}{(}\PYG{n}{ly}\PYG{o}{/}\PYG{n}{dl}\PYG{p}{)}  \PYG{c}{! ø Number of height\PYGZhy{}step}
+  \PYG{k+kt}{Integer}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{),} \PYG{k}{Parameter} \PYG{k+kd}{::} \PYG{n}{L}  \PYG{o}{=} \PYG{n+nb}{Int}\PYG{p}{(}\PYG{n}{lx}\PYG{o}{/}\PYG{n}{dl}\PYG{p}{)}  \PYG{c}{! ø Number of length\PYGZhy{}step}
+  \PYG{k+kt}{Integer}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{),} \PYG{k}{Parameter} \PYG{k+kd}{::} \PYG{n}{N}  \PYG{o}{=} \PYG{n+nb}{Int}\PYG{p}{(}\PYG{n}{t}\PYG{o}{/}\PYG{n}{dt}\PYG{p}{)}   \PYG{c}{! ø Number of timestep}
+\PYG{k}{End Module }\PYG{n}{Dconst}
+
+
+\PYG{c}{!===============================================================================}
+\PYG{c}{!                         Computationnal Constants.}
+\PYG{c}{!===============================================================================}
+\PYG{k}{Module }\PYG{n}{Cconst}
+  \PYG{k}{Use }\PYG{n}{Fconst}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{cs}\PYG{p}{,} \PYG{n}{nu}
+  \PYG{k}{Use }\PYG{n}{Dconst}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{dt}\PYG{p}{,} \PYG{n}{c}
+  \PYG{k}{Use }\PYG{n}{Sconst}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{sp}
+  \PYG{k}{Implicit None}
+\PYG{k}{  }\PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{),} \PYG{k}{Parameter} \PYG{k+kd}{::} \PYG{n}{cs2}   \PYG{o}{=} \PYG{n}{cs}\PYG{o}{*}\PYG{n}{cs}       \PYG{c}{! m²·s⁻²  Sound speed squared}
+  \PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{),} \PYG{k}{Parameter} \PYG{k+kd}{::} \PYG{n}{ics2}  \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{n}{d0}\PYG{o}{/}\PYG{n}{cs2}     \PYG{c}{! s²·m⁻²  Inverse of cs2}
+  \PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{),} \PYG{k}{Parameter} \PYG{k+kd}{::} \PYG{n}{clean} \PYG{o}{=} \PYG{n}{nu}\PYG{o}{*}\PYG{n}{ics2}\PYG{o}{/}\PYG{n}{dt}  \PYG{c}{! ø       No reason except aesthetic}
+  \PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{),} \PYG{k}{Parameter} \PYG{k+kd}{::} \PYG{n}{tau}   \PYG{o}{=} \PYG{n}{clean}\PYG{o}{+}\PYG{l+m+mi}{5}\PYG{n}{d}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}  \PYG{c}{! ø       Characteristic timescale}
+  \PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{),} \PYG{k}{Parameter} \PYG{k+kd}{::} \PYG{n}{itau}  \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{n}{d0}\PYG{o}{/}\PYG{n}{tau}     \PYG{c}{! ø       Inverse of tau}
+  \PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{),} \PYG{k}{Parameter} \PYG{k+kd}{::} \PYG{n}{mitau} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{n}{d0}\PYG{o}{\PYGZhy{}}\PYG{n}{itau}    \PYG{c}{! ø       One minus inverse of tau}
+  \PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{),} \PYG{k}{Parameter} \PYG{k+kd}{::} \PYG{n}{zh1}    \PYG{o}{=} \PYG{n}{c}\PYG{o}{/}\PYG{p}{(}\PYG{n}{c}\PYG{o}{\PYGZhy{}}\PYG{n}{sp}\PYG{p}{)}   \PYG{c}{! ø       Zou/He parameter}
+  \PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{),} \PYG{k}{Parameter} \PYG{k+kd}{::} \PYG{n}{zh2}   \PYG{o}{=} \PYG{n}{sp}\PYG{o}{/}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{n}{d0}\PYG{o}{*}\PYG{n}{c}\PYG{p}{)}  \PYG{c}{! ø       another Zou/He parameter}
+  \PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{),} \PYG{k}{Parameter} \PYG{k+kd}{::} \PYG{n}{sp2}   \PYG{o}{=} \PYG{n}{sp}\PYG{o}{*}\PYG{n}{sp}       \PYG{c}{! m²·s⁻²  Outlet speed squared}
+\PYG{k}{End Module }\PYG{n}{Cconst}
+
+
+\PYG{c}{!===============================================================================}
+\PYG{c}{!                             Lattice Constants.}
+\PYG{c}{!===============================================================================}
+\PYG{k}{Module }\PYG{n}{Lconst}
+  \PYG{k}{Use }\PYG{n}{Cconst}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{c}
+  \PYG{k}{Implicit None}
+\PYG{k}{  }\PYG{k+kt}{Integer}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{),} \PYG{k}{Parameter} \PYG{k+kd}{::} \PYG{n}{D}        \PYG{o}{=} \PYG{l+m+mi}{2}     \PYG{c}{! D2  Number of spatial dimension}
+  \PYG{k+kt}{Integer}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{),} \PYG{k}{Parameter} \PYG{k+kd}{::} \PYG{n}{Q}        \PYG{o}{=} \PYG{l+m+mi}{9}     \PYG{c}{! Q9  Number of speed discretization}
+  \PYG{k+kt}{Integer}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{),} \PYG{k}{Parameter} \PYG{k+kd}{::} \PYG{n}{ed}\PYG{p}{(}\PYG{n}{Q}\PYG{p}{,}\PYG{n}{D}\PYG{p}{)}  \PYG{o}{=} \PYG{p}{\PYGZam{}}     \PYG{c}{! ø   Directions of the speeds}
+    \PYG{n+nb}{reshape}\PYG{p}{(\PYGZam{}}
+    \PYG{p}{(}\PYG{o}{/}\PYG{l+m+mi}{0}\PYG{p}{,}  \PYG{l+m+mi}{1}\PYG{p}{,}  \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,}  \PYG{l+m+mi}{0}\PYG{p}{,}  \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,}  \PYG{l+m+mi}{1}\PYG{p}{,\PYGZam{}}
+      \PYG{l+m+mi}{0}\PYG{p}{,}  \PYG{l+m+mi}{0}\PYG{p}{,}  \PYG{l+m+mi}{1}\PYG{p}{,}  \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,}  \PYG{l+m+mi}{1}\PYG{p}{,}  \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{o}{/}\PYG{p}{),\PYGZam{}}
+    \PYG{p}{(}\PYG{o}{/}\PYG{n}{Q}\PYG{p}{,}\PYG{n}{D}\PYG{o}{/}\PYG{p}{))}
+  \PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{),} \PYG{k}{Parameter} \PYG{k+kd}{::} \PYG{n}{e}\PYG{p}{(}\PYG{n}{Q}\PYG{p}{,}\PYG{n}{D}\PYG{p}{)} \PYG{o}{=} \PYG{n}{c}\PYG{o}{*}\PYG{n+nb}{dble}\PYG{p}{(}\PYG{n}{ed}\PYG{p}{)} \PYG{c}{! m·s⁻¹   Speeds vectors}
+  \PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{),} \PYG{k}{Parameter} \PYG{k+kd}{::} \PYG{n}{w}\PYG{p}{(}\PYG{n}{Q}\PYG{p}{)}   \PYG{o}{=} \PYG{p}{\PYGZam{}}          \PYG{c}{! ø       D2Q9 Weights}
+    \PYG{p}{(}\PYG{o}{/}\PYG{l+m+mi}{4}\PYG{n}{d0}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{n}{d0}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{n}{d0}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{n}{d0}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{n}{d0}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{n}{d0}\PYG{o}{/}\PYG{l+m+mi}{4}\PYG{n}{d0}\PYG{p}{,\PYGZam{}}
+    \PYG{l+m+mi}{1}\PYG{n}{d0}\PYG{o}{/}\PYG{l+m+mi}{4}\PYG{n}{d0}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{n}{d0}\PYG{o}{/}\PYG{l+m+mi}{4}\PYG{n}{d0}\PYG{p}{,} \PYG{l+m+mi}{1}\PYG{n}{d0}\PYG{o}{/}\PYG{l+m+mi}{4}\PYG{n}{d0}\PYG{o}{/}\PYG{p}{)}\PYG{o}{/}\PYG{l+m+mi}{9}\PYG{n}{d0}
+\PYG{k}{End Module }\PYG{n}{Lconst}
+
+\PYG{c}{!===============================================================================}
+\PYG{c}{!                           Simulation Variables.}
+\PYG{c}{!===============================================================================}
+\PYG{k}{Module }\PYG{n}{Var}
+  \PYG{k}{Implicit None}
+\PYG{k}{  }\PYG{k+kt}{Integer}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{),} \PYG{k}{Allocatable} \PYG{k+kd}{::} \PYG{n}{Obj}\PYG{p}{(:,} \PYG{p}{:)}      \PYG{c}{! ø       coordinate of the Object}
+  \PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{),} \PYG{k}{Allocatable} \PYG{k+kd}{::} \PYG{n}{Feq}\PYG{p}{(:,:,:)}        \PYG{c}{! kg·m⁻³  Density speed distribution}
+  \PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{),} \PYG{k}{Allocatable} \PYG{k+kd}{::} \PYG{n}{Usqr}\PYG{p}{(:,:)}         \PYG{c}{! m·s⁻¹   Macroscopic speed squared}
+  \PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{),} \PYG{k}{Allocatable} \PYG{k+kd}{::} \PYG{n}{F}\PYG{p}{(:,:,:)}          \PYG{c}{! kg·m⁻³  Density speed distribution}
+  \PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{),} \PYG{k}{Allocatable} \PYG{k+kd}{::} \PYG{n}{U}\PYG{p}{(:,:,:)}          \PYG{c}{! m·s⁻¹   Macroscopic speed}
+  \PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{),} \PYG{k}{Allocatable} \PYG{k+kd}{::} \PYG{n}{Rho}\PYG{p}{(:,:)}          \PYG{c}{! kg·m⁻³  Macroscopic density}
+  \PYG{k+kt}{Integer}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{)} \PYG{k+kd}{::} \PYG{n}{s}                           \PYG{c}{! ø       Number of element in Obj}
+\PYG{k}{End Module }\PYG{n}{Var}
+
+
+\PYG{c}{!===============================================================================}
+\PYG{c}{!                               The main program.}
+\PYG{c}{!===============================================================================}
+\PYG{k}{Program }\PYG{n}{LBM2D}
+  \PYG{k}{Use }\PYG{n}{Var}
+  \PYG{k}{Use }\PYG{n}{Dconst}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{L}\PYG{p}{,} \PYG{n}{H}\PYG{p}{,} \PYG{n}{N}
+  \PYG{k}{Implicit None}
+\PYG{k}{  }\PYG{k+kt}{Integer}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{)} \PYG{k+kd}{::} \PYG{n}{dN}\PYG{p}{,} \PYG{n}{d} \PYG{o}{=} \PYG{l+m+mi}{100}\PYG{p}{,} \PYG{n}{ni} \PYG{o}{=} \PYG{l+m+mi}{0}
+\PYG{c}{!  Real(4) :: time1, time2, timeTot}
+  \PYG{k}{Call }\PYG{n}{Allocatall}
+  \PYG{k}{Call }\PYG{n}{InitF}
+  
+\PYG{c}{!  timeTot = 0}
+  \PYG{k}{Do }\PYG{n}{dN} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{N}
+    \PYG{k}{If} \PYG{p}{(}\PYG{n+nb}{Modulo}\PYG{p}{(}\PYG{n}{dN}\PYG{p}{,} \PYG{n}{d}\PYG{p}{)} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{k}{Then      }
+\PYG{k}{      Call }\PYG{n}{Savefile}\PYG{p}{(}\PYG{n}{ni}\PYG{p}{)}
+      \PYG{n}{ni} \PYG{o}{=} \PYG{n}{ni} \PYG{o}{+} \PYG{l+m+mi}{1}
+    \PYG{k}{End If}
+
+\PYG{c}{!    CALL CPU\PYGZus{}TIME(time1)}
+    \PYG{k}{CALL }\PYG{n}{IOlet}
+    \PYG{k}{CALL }\PYG{n}{Bound}
+    \PYG{k}{CALL }\PYG{n}{Stream}
+    \PYG{k}{CALL }\PYG{n}{CMacro}
+    \PYG{k}{CALL }\PYG{n}{CFeq}
+    \PYG{k}{CALL }\PYG{n}{Collide}
+\PYG{c}{!    CALL CPU\PYGZus{}TIME(time2)}
+\PYG{c}{!    timeTot = timeTot + (time2\PYGZhy{}time1)}
+\PYG{c}{!    Print *, real(H*L*(1+dN))/timetot}
+  \PYG{k}{End Do}
+\PYG{k}{  }
+\PYG{k}{  Call }\PYG{n}{Deallocatall}
+  
+\PYG{c}{!  Print *, real(H*L*N)/timetot}
+\PYG{c}{!  Print *, timetot}
+\PYG{k}{End Program }\PYG{n}{LBM2D}
+
+
+\PYG{c}{!===============================================================================}
+\PYG{c}{!                               Subroutines}
+\PYG{c}{!===============================================================================}
+
+\PYG{c}{!===============================================================================}
+\PYG{c}{!                             Inlet \PYGZam{} Outlet}
+\PYG{c}{!           Using Zou/He boundary condition to implement Dirichlet}
+\PYG{c}{!===============================================================================}
+\PYG{k}{Subroutine }\PYG{n}{IOlet}
+  \PYG{k}{Use }\PYG{n}{Cconst}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{zh1}\PYG{p}{,} \PYG{n}{zh2}\PYG{p}{,} \PYG{n}{sp}
+  \PYG{k}{Use }\PYG{n}{Var}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{F}\PYG{p}{,} \PYG{n}{Rho}\PYG{p}{,} \PYG{n}{U}
+  \PYG{k}{Use }\PYG{n}{Dconst}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{L}\PYG{p}{,} \PYG{n}{H}\PYG{p}{,} \PYG{n}{c}
+  \PYG{k}{Use }\PYG{n}{Sconst}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{sp}
+  \PYG{k}{Implicit None}
+\PYG{k}{  }\PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{)} \PYG{k+kd}{::} \PYG{n}{sca1}\PYG{p}{,} \PYG{n}{sca2}\PYG{p}{,} \PYG{n}{ux}\PYG{c}{!, r}
+  \PYG{k+kt}{Integer}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{)} \PYG{k+kd}{::} \PYG{n}{j}\PYG{c}{!, i}
+
+  \PYG{c}{! Outflow condition}
+  \PYG{c}{! Top \PYGZam{} Bottom wall}
+\PYG{c}{!  Do i = 1, L}
+\PYG{c}{!    F(7,i,1) = F(7,i,2)}
+\PYG{c}{!    F(3,i,1) = F(3,i,2)}
+\PYG{c}{!    F(6,i,1) = F(6,i,2)}
+\PYG{c}{!    F(8,i,H) = F(8,i,H\PYGZhy{}1)}
+\PYG{c}{!    F(5,i,H) = F(5,i,H\PYGZhy{}1)}
+\PYG{c}{!    F(9,i,H) = F(9,i,H\PYGZhy{}1)}
+\PYG{c}{!  End Do}
+  \PYG{c}{! Right wall}
+  \PYG{n}{sca2} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{n}{d0}\PYG{o}{/}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{n}{d0}\PYG{o}{*}\PYG{n}{c}\PYG{p}{)}
+  \PYG{k}{Do }\PYG{n}{j} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{H}
+    \PYG{n}{sca1} \PYG{o}{=} \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{L}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)}\PYG{o}{+}\PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{,}\PYG{n}{L}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)}\PYG{o}{+}\PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{5}\PYG{p}{,}\PYG{n}{L}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)}\PYG{o}{+} \PYG{p}{(}\PYG{l+m+mi}{2}\PYG{n}{d0}\PYG{o}{*}\PYG{p}{(}\PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{6}\PYG{p}{,}\PYG{n}{L}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{+} \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{n}{L}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{+} \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{9}\PYG{p}{,}\PYG{n}{L}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)))}
+    \PYG{n}{ux} \PYG{o}{=} \PYG{n}{c}\PYG{o}{*}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{n}{d0} \PYG{o}{\PYGZhy{}} \PYG{n}{sca1}\PYG{p}{)}
+    
+    \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{,}\PYG{n}{L}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{=} \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{n}{L}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{+} \PYG{l+m+mi}{2}\PYG{o}{*}\PYG{n}{ux}\PYG{o}{*}\PYG{n}{sca2}
+    \PYG{n}{sca1} \PYG{o}{=} \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{5}\PYG{p}{,}\PYG{n}{L}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{,}\PYG{n}{L}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)}
+    \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{7}\PYG{p}{,}\PYG{n}{L}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{=} \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{9}\PYG{p}{,}\PYG{n}{L}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{+} \PYG{p}{(}\PYG{n}{ux}\PYG{o}{*}\PYG{n}{sca2} \PYG{o}{+} \PYG{n}{sca1}\PYG{p}{)}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{n}{d0}
+    \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{,}\PYG{n}{L}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{=} \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{6}\PYG{p}{,}\PYG{n}{L}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{+} \PYG{p}{(}\PYG{n}{ux}\PYG{o}{*}\PYG{n}{sca2} \PYG{o}{\PYGZhy{}} \PYG{n}{sca1} \PYG{p}{)}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{n}{d0}
+  \PYG{k}{End Do}
+  
+  \PYG{c}{! Inflow condition Left wall}
+  \PYG{k}{Do }\PYG{n}{j} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{H}
+    \PYG{n}{U}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{=} \PYG{n}{sp}
+    \PYG{n}{U}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{n}{d0}
+    
+    \PYG{n}{Rho}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{=} \PYG{l+m+mi}{1}
+    
+    \PYG{n}{sca2} \PYG{o}{=} \PYG{n}{zh2}
+    \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{=} \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{+} \PYG{n}{sca2}\PYG{o}{*}\PYG{l+m+mi}{2}\PYG{n}{d0}
+    
+    \PYG{n}{sca1} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{n}{d0}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{n}{d0}\PYG{o}{*}\PYG{p}{(}\PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{5}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{j}\PYG{p}{))}
+    \PYG{n}{sca2} \PYG{o}{=} \PYG{n}{sca2}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{n}{d0}
+    \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{6}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{=} \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{+} \PYG{n}{sca2} \PYG{o}{+} \PYG{n}{sca1}
+    \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{9}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{=} \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{7}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{+} \PYG{n}{sca2} \PYG{o}{\PYGZhy{}} \PYG{n}{sca1}
+  \PYG{k}{End Do}
+\PYG{k}{End Subroutine}
+
+
+\PYG{c}{!===============================================================================}
+\PYG{c}{!                           Boundary with collision}
+\PYG{c}{!===============================================================================}
+\PYG{k}{Subroutine }\PYG{n}{Bound}
+  \PYG{k}{Use }\PYG{n}{Dconst}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{L}\PYG{p}{,} \PYG{n}{H}
+  \PYG{k}{Use }\PYG{n}{Var}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{F}\PYG{p}{,} \PYG{n}{Obj}\PYG{p}{,} \PYG{n}{s}
+  \PYG{k}{Implicit None}
+\PYG{k}{  }\PYG{k+kt}{Integer}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{)} \PYG{k+kd}{::} \PYG{n}{n}\PYG{p}{,} \PYG{n}{i}\PYG{p}{,} \PYG{n}{j}
+  \PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{)} \PYG{k+kd}{::} \PYG{n}{fi}
+  
+  \PYG{k}{Do }\PYG{n}{n} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{s}
+    \PYG{n}{i} \PYG{o}{=} \PYG{n}{Obj}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{n}\PYG{p}{)}
+    \PYG{n}{j} \PYG{o}{=} \PYG{n}{Obj}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{n}{n}\PYG{p}{)}
+    
+    \PYG{n}{fi} \PYG{o}{=} \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)}
+    \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{=} \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)}
+    \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{=} \PYG{n}{fi}
+    
+    \PYG{n}{fi} \PYG{o}{=} \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{6}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)}
+    \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{6}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{=} \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)}
+    \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{=} \PYG{n}{fi}
+    
+    \PYG{n}{fi} \PYG{o}{=} \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)}
+    \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{=} \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{5}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)}
+    \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{5}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{=} \PYG{n}{fi}
+        
+    \PYG{n}{fi} \PYG{o}{=} \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{7}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)}
+    \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{7}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{=} \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{9}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)}
+    \PYG{n}{F}\PYG{p}{(}\PYG{l+m+mi}{9}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{=} \PYG{n}{fi}
+  \PYG{k}{End Do}
+\PYG{k}{  }
+\PYG{k}{End Subroutine}
+
+
+\PYG{c}{!===============================================================================}
+\PYG{c}{!                               Compute Macro}
+\PYG{c}{!===============================================================================}
+\PYG{k}{Subroutine }\PYG{n}{CMacro}
+  \PYG{k}{Use }\PYG{n}{Var}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{F}\PYG{p}{,} \PYG{n}{Rho}\PYG{p}{,} \PYG{n}{U}\PYG{p}{,} \PYG{n}{Usqr}
+  \PYG{k}{Use }\PYG{n}{Dconst}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{L}\PYG{p}{,} \PYG{n}{H}
+  \PYG{k}{Use }\PYG{n}{Lconst}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{Q}\PYG{p}{,} \PYG{n}{e}
+  \PYG{k}{Implicit None}
+\PYG{k}{  }\PYG{k+kt}{Integer}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{)} \PYG{k+kd}{::} \PYG{n}{i}\PYG{p}{,} \PYG{n}{j}
+  \PYG{k+kt}{Integer}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)} \PYG{k+kd}{::} \PYG{n}{k}
+  \PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{)} \PYG{k+kd}{::} \PYG{n}{r}
+   
+  \PYG{k}{Do }\PYG{n}{j} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{H}
+    \PYG{k}{Do }\PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{L}
+      \PYG{n}{Rho}\PYG{p}{(}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{=} \PYG{l+m+mi}{0}
+      \PYG{n}{U}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{=} \PYG{l+m+mi}{0}
+      \PYG{n}{U}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{=} \PYG{l+m+mi}{0}
+      \PYG{k}{Do }\PYG{n}{k} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{Q}
+        \PYG{n}{Rho}\PYG{p}{(}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{=} \PYG{n}{Rho}\PYG{p}{(}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{+} \PYG{n}{F}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)}
+        \PYG{k}{If}\PYG{p}{(}\PYG{n}{e}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{)} \PYG{o}{/=} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{k}{Then}
+\PYG{k}{          }\PYG{n}{U}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{=} \PYG{n}{U}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{+} \PYG{n}{F}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)}\PYG{o}{*}\PYG{n}{e}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{)}
+        \PYG{k}{End If}
+\PYG{k}{        If}\PYG{p}{(}\PYG{n}{e}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{)} \PYG{o}{/=} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{k}{Then}
+\PYG{k}{          }\PYG{n}{U}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{=} \PYG{n}{U}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{+} \PYG{n}{F}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)}\PYG{o}{*}\PYG{n}{e}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{)}
+        \PYG{k}{End If}
+\PYG{k}{      End Do}
+\PYG{k}{      }\PYG{n}{r} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{n}{d0}\PYG{o}{/}\PYG{n}{Rho}\PYG{p}{(}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)}
+      \PYG{n}{U}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)}  \PYG{o}{=} \PYG{n}{U}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)}\PYG{o}{*}\PYG{n}{r}
+      \PYG{n}{U}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)}  \PYG{o}{=} \PYG{n}{U}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)}\PYG{o}{*}\PYG{n}{r}
+      \PYG{n}{Usqr}\PYG{p}{(}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{=} \PYG{n}{U}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{*} \PYG{n}{U}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{+} \PYG{n}{U}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{*} \PYG{n}{U}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)}
+    \PYG{k}{End Do}
+\PYG{k}{  End Do}
+\PYG{k}{End Subroutine}
+
+
+\PYG{c}{!===============================================================================}
+\PYG{c}{!                               Compute Feq}
+\PYG{c}{!===============================================================================}
+\PYG{k}{Subroutine }\PYG{n}{CFeq}
+  \PYG{k}{Use }\PYG{n}{Var}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{Feq}\PYG{p}{,} \PYG{n}{U}\PYG{p}{,} \PYG{n}{Usqr}\PYG{p}{,} \PYG{n}{Rho}
+  \PYG{k}{Use }\PYG{n}{Lconst}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{Q}\PYG{p}{,} \PYG{n}{e}\PYG{p}{,} \PYG{n}{w}
+  \PYG{k}{Use }\PYG{n}{Dconst}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{L}\PYG{p}{,} \PYG{n}{H}
+  \PYG{k}{Use }\PYG{n}{Cconst}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{ics2}
+  \PYG{k}{Implicit None}
+\PYG{k}{  }\PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{)} \PYG{k+kd}{::} \PYG{n}{Ue}
+  \PYG{k+kt}{Integer}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{)} \PYG{k+kd}{::} \PYG{n}{i}\PYG{p}{,} \PYG{n}{j}
+  \PYG{k+kt}{Integer}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)} \PYG{k+kd}{::} \PYG{n}{k}
+  
+  \PYG{k}{Do }\PYG{n}{j} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{H}
+    \PYG{k}{Do }\PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{L}
+      \PYG{n}{Feq}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{=} \PYG{n}{w}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{*}\PYG{n}{Rho}\PYG{p}{(}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)}\PYG{o}{*}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{n}{d0}\PYG{o}{\PYGZhy{}}\PYG{p}{(.}\PYG{l+m+mi}{5}\PYG{n}{d0}\PYG{o}{*}\PYG{n}{Usqr}\PYG{p}{(}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)}\PYG{o}{*}\PYG{n}{ics2}\PYG{p}{))}
+    \PYG{k}{End Do}
+\PYG{k}{  End Do}
+\PYG{k}{    }
+\PYG{k}{  Do }\PYG{n}{j} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{H}
+    \PYG{k}{Do }\PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{L}
+      \PYG{k}{Do }\PYG{n}{k} \PYG{o}{=} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{Q}
+        \PYG{n}{Ue} \PYG{o}{=} \PYG{n}{e}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{*}\PYG{n}{U}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)}\PYG{o}{+}\PYG{n}{e}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{o}{*}\PYG{n}{U}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)}
+        \PYG{n}{Feq}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{=} \PYG{n}{w}\PYG{p}{(}\PYG{n}{k}\PYG{p}{)}\PYG{o}{*}\PYG{n}{Rho}\PYG{p}{(}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)}\PYG{o}{*}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{n}{d0}\PYG{o}{+}\PYG{p}{(}\PYG{n}{Ue}\PYG{o}{+}\PYG{p}{.}\PYG{l+m+mi}{5}\PYG{n}{d0}\PYG{o}{*}\PYG{p}{((}\PYG{n}{Ue}\PYG{o}{*}\PYG{n}{Ue}\PYG{o}{*}\PYG{n}{ics2}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{n}{Usqr}\PYG{p}{(}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)))}\PYG{o}{*}\PYG{n}{ics2}\PYG{p}{)}
+      \PYG{k}{End Do}
+\PYG{k}{    End Do}
+\PYG{k}{  End Do}
+\PYG{k}{End Subroutine}
+
+
+\PYG{c}{!===============================================================================}
+\PYG{c}{!                             Collide Step}
+\PYG{c}{!===============================================================================}
+\PYG{k}{Subroutine }\PYG{n}{Collide}
+  \PYG{k}{Use }\PYG{n}{Var}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{F}\PYG{p}{,} \PYG{n}{Feq}
+  \PYG{k}{Use }\PYG{n}{Cconst}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{itau}\PYG{p}{,} \PYG{n}{mitau}
+  \PYG{k}{Use }\PYG{n}{Dconst}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{L}\PYG{p}{,} \PYG{n}{H}
+  \PYG{k}{Use }\PYG{n}{Lconst}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{Q}
+  \PYG{k}{Implicit None}
+\PYG{k}{  }\PYG{k+kt}{Integer}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{)} \PYG{k+kd}{::} \PYG{n}{i}\PYG{p}{,} \PYG{n}{j}
+  \PYG{k+kt}{Integer}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)} \PYG{k+kd}{::} \PYG{n}{k}
+  
+  \PYG{k}{Do }\PYG{n}{j} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{H}
+    \PYG{k}{Do }\PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{L}
+      \PYG{k}{Do }\PYG{n}{k} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{Q}
+        \PYG{n}{F}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)}\PYG{o}{=} \PYG{n}{mitau}\PYG{o}{*}\PYG{n}{F}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{+} \PYG{n}{itau}\PYG{o}{*}\PYG{n}{Feq}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)}
+      \PYG{k}{End Do}
+\PYG{k}{    End Do}
+\PYG{k}{  End Do}
+\PYG{k}{End Subroutine}
+
+
+\PYG{c}{!===============================================================================}
+\PYG{c}{!                             Stream Step}
+\PYG{c}{!===============================================================================}
+\PYG{k}{Subroutine }\PYG{n}{Stream}
+  \PYG{k}{Use }\PYG{n}{Lconst}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{Q}\PYG{p}{,} \PYG{n}{ed}
+  \PYG{k}{Use }\PYG{n}{Dconst}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{L}\PYG{p}{,} \PYG{n}{H}
+  \PYG{k}{Use }\PYG{n}{Var}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{F}
+  \PYG{k}{Implicit None}
+\PYG{k}{  }\PYG{k+kt}{Integer}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)} \PYG{k+kd}{::} \PYG{n}{k}\PYG{p}{,} \PYG{n}{e}
+  \PYG{k+kt}{Integer}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{)} \PYG{k+kd}{::} \PYG{n}{i}\PYG{p}{,} \PYG{n}{j}
+  \PYG{k+kt}{Real}\PYG{p}{(}\PYG{l+m+mi}{8}\PYG{p}{)} \PYG{k+kd}{::} \PYG{n}{fs}
+  
+  \PYG{k}{Do }\PYG{n}{k} \PYG{o}{=} \PYG{l+m+mi}{2}\PYG{p}{,} \PYG{n}{Q}
+    \PYG{k}{If} \PYG{p}{(}\PYG{n}{ed}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{)} \PYG{o}{/=} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{k}{Then}
+\PYG{k}{      }\PYG{n}{e} \PYG{o}{=} \PYG{p}{(}\PYG{n}{ed}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{*}\PYG{l+m+mi}{5}\PYG{n}{d}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}
+      \PYG{k}{Do }\PYG{n}{j} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{H}
+        \PYG{n}{fs} \PYG{o}{=} \PYG{n}{F}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{o}{+}\PYG{n}{e}\PYG{o}{*}\PYG{p}{(}\PYG{n}{L}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{),}\PYG{n}{j}\PYG{p}{)}
+        \PYG{k}{Do }\PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{2}\PYG{o}{+}\PYG{n}{e}\PYG{o}{*}\PYG{p}{(}\PYG{n}{L}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{3}\PYG{p}{),} \PYG{n}{L}\PYG{o}{\PYGZhy{}}\PYG{n}{e}\PYG{o}{*}\PYG{p}{(}\PYG{n}{L}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{),} \PYG{o}{\PYGZhy{}}\PYG{n}{ed}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{)} 
+          \PYG{n}{F}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{=} \PYG{n}{F}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,}\PYG{n}{i}\PYG{o}{\PYGZhy{}}\PYG{n}{ed}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{),}\PYG{n}{j}\PYG{p}{)}
+        \PYG{k}{End Do}
+\PYG{k}{        }\PYG{n}{F}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,}\PYG{n}{L}\PYG{o}{\PYGZhy{}}\PYG{n}{e}\PYG{o}{*}\PYG{p}{(}\PYG{n}{L}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{),}\PYG{n}{j}\PYG{p}{)} \PYG{o}{=} \PYG{n}{fs}
+      \PYG{k}{End Do}
+\PYG{k}{    End If}
+\PYG{k}{    If} \PYG{p}{(}\PYG{n}{ed}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{)} \PYG{o}{/=} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{k}{Then}
+\PYG{k}{      }\PYG{n}{e} \PYG{o}{=} \PYG{p}{(}\PYG{n}{ed}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{*}\PYG{l+m+mi}{5}\PYG{n}{d}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}
+      \PYG{k}{Do }\PYG{n}{i} \PYG{o}{=} \PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{L}
+        \PYG{n}{fs} \PYG{o}{=} \PYG{n}{F}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{o}{+}\PYG{n}{e}\PYG{o}{*}\PYG{p}{(}\PYG{n}{H}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{))}
+        \PYG{k}{Do }\PYG{n}{j} \PYG{o}{=} \PYG{l+m+mi}{2}\PYG{o}{+}\PYG{n}{e}\PYG{o}{*}\PYG{p}{(}\PYG{n}{H}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{3}\PYG{p}{),} \PYG{n}{H}\PYG{o}{\PYGZhy{}}\PYG{n}{e}\PYG{o}{*}\PYG{p}{(}\PYG{n}{H}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{),} \PYG{o}{\PYGZhy{}}\PYG{n}{ed}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{)}
+          \PYG{n}{F}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{p}{)} \PYG{o}{=} \PYG{n}{F}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{j}\PYG{o}{\PYGZhy{}}\PYG{n}{ed}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{))}
+        \PYG{k}{End Do}
+\PYG{k}{        }\PYG{n}{F}\PYG{p}{(}\PYG{n}{k}\PYG{p}{,}\PYG{n}{i}\PYG{p}{,}\PYG{n}{H}\PYG{o}{\PYGZhy{}}\PYG{n}{e}\PYG{o}{*}\PYG{p}{(}\PYG{n}{H}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{))} \PYG{o}{=} \PYG{n}{fs}
+      \PYG{k}{End Do}
+\PYG{k}{    End If}
+\PYG{k}{  End Do}
+\PYG{k}{  }
+\PYG{k}{End Subroutine}
+\PYG{c}{!===============================================================================}
+\PYG{c}{!                           Initialisation of F}
+\PYG{c}{!===============================================================================}
+\PYG{k}{Subroutine }\PYG{n}{InitF}
+  \PYG{k}{Use }\PYG{n}{var}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{U}\PYG{p}{,} \PYG{n}{Rho}\PYG{p}{,} \PYG{n}{F}\PYG{p}{,} \PYG{n}{Feq}\PYG{p}{,} \PYG{n}{Usqr}
+  \PYG{k}{Use }\PYG{n}{Cconst}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{sp2}
+  \PYG{k}{Use }\PYG{n}{Sconst}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{sp}
+  \PYG{n}{Rho} \PYG{o}{=} \PYG{l+m+mi}{1}
+  \PYG{n}{U}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,:,:)} \PYG{o}{=} \PYG{n}{sp}
+  \PYG{n}{U}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,:,:)} \PYG{o}{=} \PYG{l+m+mi}{0}
+  \PYG{n}{Usqr} \PYG{o}{=} \PYG{n}{sp2}
+  \PYG{k}{Call }\PYG{n}{CFeq}
+  \PYG{n}{F} \PYG{o}{=} \PYG{n}{Feq}
+\PYG{k}{End Subroutine}
+
+
+\PYG{c}{!===============================================================================}
+\PYG{c}{!              Convert the image of the object from svg to pgm}
+\PYG{c}{!     and import it into a matrix with 1 and 0 (1 stand for the object)}
+\PYG{c}{!===============================================================================}
+\PYG{k}{Subroutine }\PYG{n}{Object}
+  \PYG{k}{Use }\PYG{n}{Dconst}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{L}\PYG{p}{,} \PYG{n}{H}
+  \PYG{k}{Use }\PYG{n}{Var}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{Obj}\PYG{p}{,} \PYG{n}{s}
+  \PYG{k}{Implicit None}
+\PYG{k}{  }\PYG{k+kt}{Character}\PYG{p}{(}\PYG{n+nb}{len}\PYG{o}{=}\PYG{l+m+mi}{210}\PYG{p}{)} \PYG{k+kd}{::} \PYG{n}{command}             \PYG{c}{! The bash command}
+  \PYG{k+kt}{Integer}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)} \PYG{k+kd}{::} \PYG{n}{Ob}\PYG{p}{(}\PYG{n}{L}\PYG{p}{,}\PYG{n}{H}\PYG{p}{)}
+  \PYG{k+kt}{Integer}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{)} \PYG{k+kd}{::} \PYG{n}{i}\PYG{p}{,} \PYG{n}{j}                        \PYG{c}{! Itterator}
+  
+  \PYG{n}{command} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}(\PYGZdq{}rsvg\PYGZhy{}convert \PYGZhy{}w \PYGZdq{},i0,\PYGZdq{} \PYGZhy{}h \PYGZdq{},i0,\PYGZdq{} objet.svg \PYGZhy{}o objet.png\PYGZdq{})\PYGZsq{}}
+  \PYG{k}{Write}\PYG{p}{(}\PYG{n}{command}\PYG{p}{,} \PYG{n}{command}\PYG{p}{)} \PYG{n}{L}\PYG{p}{,} \PYG{n}{H}
+  
+  \PYG{k}{Call }\PYG{n+nb}{execute\PYGZus{}command\PYGZus{}line}\PYG{p}{(}\PYG{n}{command}\PYG{p}{,} \PYG{n}{wait}\PYG{o}{=}\PYG{p}{.}\PYG{n}{true}\PYG{p}{.)}
+  
+  \PYG{n}{command} \PYG{o}{=} \PYG{l+s+s2}{\PYGZdq{}convert \PYGZhy{}compress none objet.png \PYGZhy{}alpha extract \PYGZhy{}threshold 0\PYGZpc{}\PYGZam{}}
+\PYG{l+s+s2}{  \PYGZam{} \PYGZhy{}negate objet.pbm\PYGZdq{}}
+  \PYG{k}{Call }\PYG{n+nb}{execute\PYGZus{}command\PYGZus{}line}\PYG{p}{(}\PYG{n}{command}\PYG{p}{,} \PYG{n}{wait}\PYG{o}{=}\PYG{p}{.}\PYG{n}{true}\PYG{p}{.)}
+  
+  \PYG{k}{Open}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{,} \PYG{k}{file} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}objet.pbm\PYGZsq{}}\PYG{p}{,} \PYG{n}{action}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}read\PYGZsq{}}\PYG{p}{)}
+
+  \PYG{k}{Read}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{,} \PYG{o}{*}\PYG{p}{)} \PYG{n}{command}
+  \PYG{k}{Read}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{,} \PYG{o}{*}\PYG{p}{)} \PYG{n}{command}
+
+  \PYG{k}{Do }\PYG{n}{i}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{H}
+    \PYG{k}{Read}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{,} \PYG{o}{*}\PYG{p}{)} \PYG{n}{Ob}\PYG{p}{(:,} \PYG{n}{i}\PYG{p}{)}
+  \PYG{k}{End Do}
+\PYG{k}{  Close}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{)}
+    
+  \PYG{n}{s} \PYG{o}{=} \PYG{l+m+mi}{0}
+  \PYG{k}{Do }\PYG{n}{j}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{H}
+    \PYG{k}{Do }\PYG{n}{i}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{l}
+      \PYG{n}{s} \PYG{o}{=} \PYG{n}{s} \PYG{o}{+} \PYG{n}{Ob}\PYG{p}{(}\PYG{n}{i}\PYG{p}{,} \PYG{n}{j}\PYG{p}{)}
+    \PYG{k}{End Do}
+\PYG{k}{  End Do}
+\PYG{k}{  }
+\PYG{k}{  Allocate}\PYG{p}{(}\PYG{n}{Obj}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{n}{s}\PYG{p}{))}
+  
+  \PYG{n}{s} \PYG{o}{=} \PYG{l+m+mi}{0}
+  \PYG{k}{Do }\PYG{n}{j}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{H}
+    \PYG{k}{Do }\PYG{n}{i}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{l}
+      \PYG{k}{If} \PYG{p}{(}\PYG{n}{Ob}\PYG{p}{(}\PYG{n}{i}\PYG{p}{,} \PYG{n}{j}\PYG{p}{)} \PYG{o}{==} \PYG{l+m+mi}{1}\PYG{p}{)} \PYG{k}{Then}
+\PYG{k}{        }\PYG{n}{s} \PYG{o}{=} \PYG{n}{s} \PYG{o}{+} \PYG{l+m+mi}{1}
+        \PYG{n}{Obj}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{n}{s}\PYG{p}{)} \PYG{o}{=} \PYG{n}{i}
+        \PYG{n}{Obj}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{n}{s}\PYG{p}{)} \PYG{o}{=} \PYG{n}{j}
+      \PYG{k}{End If}
+\PYG{k}{    End Do}
+\PYG{k}{  End Do}
+\PYG{k}{  }
+\PYG{k}{End Subroutine}
+
+
+\PYG{c}{!===============================================================================}
+\PYG{c}{!              Save the macroscopic values such as speed and density}
+\PYG{c}{!===============================================================================}
+\PYG{k}{Subroutine }\PYG{n}{Savefile}\PYG{p}{(}\PYG{n}{dN}\PYG{p}{)}
+  \PYG{k}{Use }\PYG{n}{Var}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{U}\PYG{p}{,} \PYG{n}{Rho}
+  \PYG{k}{Use }\PYG{n}{Dconst}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{H}
+  \PYG{k}{Implicit None}
+\PYG{k}{  }\PYG{k+kt}{Character}\PYG{p}{(}\PYG{n+nb}{len}\PYG{o}{=}\PYG{l+m+mi}{24}\PYG{p}{)} \PYG{k+kd}{::} \PYG{n}{Namefile}
+  \PYG{k+kt}{Integer}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{)} \PYG{k+kd}{::} \PYG{n}{dN}\PYG{p}{,} \PYG{n}{i}
+  
+  \PYG{k}{Write}\PYG{p}{(}\PYG{n}{Namefile}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}(\PYGZdq{}./Ux/\PYGZdq{},i5.5,\PYGZdq{}.csv\PYGZdq{})\PYGZsq{}}\PYG{p}{)} \PYG{n}{dN}
+  \PYG{k}{Open}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{,} \PYG{k}{file}\PYG{o}{=}\PYG{n}{Namefile}\PYG{p}{,} \PYG{n}{action}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Write\PYGZsq{}}\PYG{p}{)}
+  \PYG{k}{Write}\PYG{p}{(}\PYG{n}{Namefile}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}(\PYGZdq{}./Uy/\PYGZdq{},i5.5,\PYGZdq{}.csv\PYGZdq{})\PYGZsq{}}\PYG{p}{)} \PYG{n}{dN}
+  \PYG{k}{Open}\PYG{p}{(}\PYG{l+m+mi}{11}\PYG{p}{,} \PYG{k}{file}\PYG{o}{=}\PYG{n}{Namefile}\PYG{p}{,} \PYG{n}{action}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Write\PYGZsq{}}\PYG{p}{)}
+  \PYG{k}{Write}\PYG{p}{(}\PYG{n}{Namefile}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}(\PYGZdq{}./P/\PYGZdq{},i5.5,\PYGZdq{}.csv\PYGZdq{})\PYGZsq{}}\PYG{p}{)}  \PYG{n}{dN}
+  \PYG{k}{Open}\PYG{p}{(}\PYG{l+m+mi}{12}\PYG{p}{,} \PYG{k}{file}\PYG{o}{=}\PYG{n}{Namefile}\PYG{p}{,} \PYG{n}{action}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}Write\PYGZsq{}}\PYG{p}{)}
+  \PYG{k}{Do }\PYG{n}{i}\PYG{o}{=}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{H}
+    \PYG{k}{Write}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{,} \PYG{o}{*}\PYG{p}{)} \PYG{n}{U}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,:,}\PYG{n}{i}\PYG{p}{)}
+    \PYG{k}{Write}\PYG{p}{(}\PYG{l+m+mi}{11}\PYG{p}{,} \PYG{o}{*}\PYG{p}{)} \PYG{n}{U}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,:,}\PYG{n}{i}\PYG{p}{)}
+    \PYG{k}{Write}\PYG{p}{(}\PYG{l+m+mi}{12}\PYG{p}{,} \PYG{o}{*}\PYG{p}{)} \PYG{n}{Rho}\PYG{p}{(:,}\PYG{n}{i}\PYG{p}{)}
+  \PYG{k}{End Do}
+\PYG{k}{  Close}\PYG{p}{(}\PYG{l+m+mi}{10}\PYG{p}{)}
+  \PYG{k}{Close}\PYG{p}{(}\PYG{l+m+mi}{11}\PYG{p}{)}
+  \PYG{k}{Close}\PYG{p}{(}\PYG{l+m+mi}{12}\PYG{p}{)}
+\PYG{k}{End Subroutine}
+
+
+
+\PYG{c}{!===============================================================================}
+\PYG{c}{!                             Allocate all matrixes}
+\PYG{c}{!===============================================================================}
+\PYG{k}{Subroutine }\PYG{n}{Allocatall}
+  \PYG{k}{Use }\PYG{n}{Var}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{F}\PYG{p}{,} \PYG{n}{Feq}\PYG{p}{,} \PYG{n}{U}\PYG{p}{,} \PYG{n}{Usqr}\PYG{p}{,} \PYG{n}{Rho}
+  \PYG{k}{Use }\PYG{n}{Dconst}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{L}\PYG{p}{,} \PYG{n}{H}
+  \PYG{k}{Use }\PYG{n}{Lconst}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{Q}\PYG{p}{,} \PYG{n}{D}
+  
+  \PYG{k}{Allocate}\PYG{p}{(}\PYG{n}{F}\PYG{p}{(}\PYG{n}{Q}\PYG{p}{,}\PYG{n}{L}\PYG{p}{,}\PYG{n}{H}\PYG{p}{))}
+  \PYG{k}{Allocate}\PYG{p}{(}\PYG{n}{Feq}\PYG{p}{(}\PYG{n}{Q}\PYG{p}{,}\PYG{n}{L}\PYG{p}{,}\PYG{n}{H}\PYG{p}{))}
+  \PYG{k}{Allocate}\PYG{p}{(}\PYG{n}{U}\PYG{p}{(}\PYG{n}{D}\PYG{p}{,}\PYG{n}{L}\PYG{p}{,}\PYG{n}{H}\PYG{p}{))}
+  \PYG{k}{Allocate}\PYG{p}{(}\PYG{n}{Usqr}\PYG{p}{(}\PYG{n}{L}\PYG{p}{,}\PYG{n}{H}\PYG{p}{))}
+  \PYG{k}{Allocate}\PYG{p}{(}\PYG{n}{Rho}\PYG{p}{(}\PYG{n}{L}\PYG{p}{,}\PYG{n}{H}\PYG{p}{))}
+  \PYG{k}{Call }\PYG{n}{Object}
+\PYG{k}{End Subroutine}
+
+
+\PYG{c}{!===============================================================================}
+\PYG{c}{!                           Deallocate all matrixes}
+\PYG{c}{!===============================================================================}
+\PYG{k}{Subroutine }\PYG{n}{Deallocatall}
+  \PYG{k}{Use }\PYG{n}{Var}
+  
+  \PYG{k}{Deallocate}\PYG{p}{(}\PYG{n}{F}\PYG{p}{)}
+  \PYG{k}{Deallocate}\PYG{p}{(}\PYG{n}{Feq}\PYG{p}{)}
+  \PYG{k}{Deallocate}\PYG{p}{(}\PYG{n}{U}\PYG{p}{)}
+  \PYG{k}{Deallocate}\PYG{p}{(}\PYG{n}{Usqr}\PYG{p}{)}
+  \PYG{k}{Deallocate}\PYG{p}{(}\PYG{n}{Rho}\PYG{p}{)}
+  \PYG{k}{Deallocate}\PYG{p}{(}\PYG{n}{Obj}\PYG{p}{)}
+\PYG{k}{End Subroutine}
+\end{Verbatim}

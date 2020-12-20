@@ -1,0 +1,29 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c}{!===============================================================================}
+\PYG{c}{!                               The main program.}
+\PYG{c}{!===============================================================================}
+\PYG{k}{Program }\PYG{n}{LBM2D}
+  \PYG{k}{Use }\PYG{n}{Var}
+  \PYG{k}{Use }\PYG{n}{Dconst}\PYG{p}{,} \PYG{n}{Only}\PYG{p}{:} \PYG{n}{L}\PYG{p}{,} \PYG{n}{H}\PYG{p}{,} \PYG{n}{N}
+  \PYG{k}{Implicit None}
+\PYG{k}{  }\PYG{k+kt}{Integer}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{)} \PYG{k+kd}{::} \PYG{n}{dN}\PYG{p}{,} \PYG{n}{d} \PYG{o}{=} \PYG{l+m+mi}{100}\PYG{p}{,} \PYG{n}{ni} \PYG{o}{=} \PYG{l+m+mi}{0}
+  \PYG{k}{Call }\PYG{n}{Allocatall}             \PYG{c}{! Alloue les variables en mémoire}
+  \PYG{k}{Call }\PYG{n}{InitF}                  \PYG{c}{! Initialise les variables}
+
+  \PYG{k}{Do }\PYG{n}{dN} \PYG{o}{=} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{N}
+    \PYG{k}{If} \PYG{p}{(}\PYG{n+nb}{Modulo}\PYG{p}{(}\PYG{n}{dN}\PYG{p}{,} \PYG{n}{d}\PYG{p}{)} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{k}{Then}
+\PYG{k}{      Call }\PYG{n}{Savefile}\PYG{p}{(}\PYG{n}{ni}\PYG{p}{)}      \PYG{c}{! Sauvegarde les valeurs intermédiaires pour pouvoir faire des animations}
+      \PYG{n}{ni} \PYG{o}{=} \PYG{n}{ni} \PYG{o}{+} \PYG{l+m+mi}{1}
+    \PYG{k}{End If}
+
+\PYG{k}{    CALL }\PYG{n}{IOlet}                \PYG{c}{! Initialisation}
+    \PYG{k}{CALL }\PYG{n}{Bound}                \PYG{c}{! Initialisation}
+    \PYG{k}{CALL }\PYG{n}{Stream}               \PYG{c}{! Flux}
+    \PYG{k}{CALL }\PYG{n}{CMacro}               \PYG{c}{! Collision : calcul les valeurs macro}
+    \PYG{k}{CALL }\PYG{n}{CFeq}                 \PYG{c}{! Collision : calcul les valeurs de feq}
+    \PYG{k}{CALL }\PYG{n}{Collide}              \PYG{c}{! Collision : applique l\PYGZsq{}opérateur collision}
+  \PYG{k}{End Do}
+
+\PYG{k}{  Call }\PYG{n}{Deallocatall}           \PYG{c}{! Libère la mémoire}
+\PYG{k}{End Program }\PYG{n}{LBM2D}
+\end{Verbatim}
