@@ -8,8 +8,10 @@
 Module Fconst
   Implicit None
   Real(8), Parameter :: cs  = 3.4d2         ! m·s⁻¹   Speed of sound
-  Real(8), Parameter :: rho = 1.177d0       ! kg·m⁻³  Fluid density
-  Real(8), Parameter :: nu  = .01           ! m²·s⁻¹  Kinematic viscosity
+  !Real(8), Parameter :: rho = 1.177d0      ! kg·m⁻³  Fluid density
+  Real(8), Parameter :: rho = 3.639d-1      ! kg·m⁻³  Fluid density troposphere
+  !Real(8), Parameter :: nu  = 1            ! m²·s⁻¹  Kinematic viscosity
+  Real(8), Parameter :: nu  = 3.5d-5        ! m²·s⁻¹  Kinematic viscosity tropo
 End Module Fconst
 
 
@@ -21,7 +23,7 @@ Module Sconst
   Real(8), Parameter :: lx  = 2.5d0         ! m     Length of the box
   Real(8), Parameter :: ly  = 2d0           ! m     Height of the box
   Real(8), Parameter :: t   = 5d0           ! s     Total time of the simulation
-  Real(8), Parameter :: sp  = 1.5d1        ! m·s⁻¹ Inlet Speed
+  Real(8), Parameter :: sp  = 1.5d1         ! m·s⁻¹ Inlet Speed
 End Module Sconst
 
 
@@ -32,13 +34,14 @@ Module Dconst
   Use Fconst, Only: cs
   Use Sconst, Only: lx, ly, t
   Implicit None
-  Real(8), Parameter :: dt    = 1.5d-5      ! s Timestep
+  Real(8), Parameter :: dt    = 1d-6      ! s Timestep
   Real(8), Parameter :: dl    = cs*dt       ! m Spatial step
   Integer(4), Parameter :: H  = Int(ly/dl)  ! ø Number of height-step
   Integer(4), Parameter :: L  = Int(lx/dl)  ! ø Number of length-step
   Integer(4), Parameter :: NP = Int(t/dt)   ! ø Number of timestep (partial)
   Integer(4), Parameter :: st = 200         ! ø Number of snapshot
   integer(4), Parameter :: d  = NP/st       ! ø Itterations between of snapshot
+  integer(4), Parameter :: ds = 10          ! ø space between saved point
   Integer(4), Parameter :: N  = st*(d + 1)  ! ø Number of timestep (total)
 End Module Dconst
 
@@ -71,7 +74,7 @@ Module Lconst
   Implicit None
   Integer(1), Parameter :: D        = 2     ! D2  Number of spatial dimension
   Integer(1), Parameter :: Q        = 9     ! Q9  Number of speed discretization
-  Integer(1), Parameter :: ed(Q,D)  = &     ! ø   Directions of the speeds
+  Integer(8), Parameter :: ed(Q,D)  = &     ! ø   Directions of the speeds
     reshape(&
     [0,  1,  0, -1,  0,  1, -1, -1,  1,&
      0,  0,  1,  0, -1,  1,  1, -1, -1], [Q,D])
@@ -237,15 +240,11 @@ Subroutine CFeq
   Real(8) :: Ue(L,H)
   Integer(1) :: k
   
-  !Where (nObj) 
-    Feq(1,:,:) = w(1) * Rho(:,:) * ( 1d0 - ( .5d0 * Usqr(:,:) * ics2))
-  !End Where
+  Feq(1,:,:) = w(1) * Rho(:,:) * ( 1d0 - ( .5d0 * Usqr(:,:) * ics2))
   
   Do k = 2, Q
-    !Where (nObj)
       Ue = e(k,1)*U(1,:,:)+e(k,2)*U(2,:,:)
       Feq(k,:,:) = w(k)*Rho(:,:)*(1d0+(Ue(:,:)+.5d0*((Ue(:,:)*Ue(:,:)*ics2)-Usqr(:,:)))*ics2)
-    !End Where
   End Do
  End Subroutine
 
@@ -261,9 +260,7 @@ Subroutine Collide
   Implicit None
   Integer(8) :: k
   Do k=1, Q
-    !Where (nObj)
-      F(:, :, k) = mitau * F(:, :, k) + itau * Feq(:, :, k)
-    !End Where
+      F(k, :, :) = mitau * F(k, :, :) + itau * Feq(k, :, :)
   End Do
 End Subroutine
 
@@ -274,22 +271,25 @@ End Subroutine
 Subroutine Stream
   Use Lconst, Only: Q, ed
   Use Dconst, Only: L, H
-  Use Var, Only: F
+  Use Var, Only: F, nObj
   Implicit None
-  Integer(1) :: k, e
-  Integer(4) :: i, j
-  Real(8) :: fs
-   
-  Do k = 2, Q  
-    If (ed(k,1) /= 0) Then
-      F(k,:,:) = CSHIFT(F(k,:,:), ed(k,1), 2)
-    End If
-    If (ed(k,2) /= 0) Then
-      F(k,:,:) = CSHIFT(F(k,:,:), ed(k,2), 1)
-    End If
-  End Do
+  Integer(8) :: i, j
+  Integer(1) :: k
   
+  Do k = 2, Q
+    If (ed(k,1) == 1) Then
+      F(k,2:L,:) = F(k,:L-1,:)
+    Else If (ed(k,1) == -1) Then
+      F(k,:L-1,:) = F(k,2:L,:)
+    End If
+    If (ed(k,2) == 1) Then
+      F(k,:,2:H) = F(k,:,:H-1)
+    Else If (ed(k, 2) == -1) Then
+      F(k,:,1:H-1) = F(k,:,2:H)
+    End If
+  End Do 
 End Subroutine
+
 !===============================================================================
 !                           Initialisation of F
 !===============================================================================
@@ -362,6 +362,7 @@ End Subroutine
 !              Save the macroscopic values such as speed and density
 !===============================================================================
 Subroutine Savefile(dN)
+  Use Dconst, Only: ds
   Use Var, Only: U, Rho
   Use Dconst, Only: H
   Implicit None
@@ -370,12 +371,12 @@ Subroutine Savefile(dN)
 
   Write(Namefile, '("./U/",i5.5,".bin")') dN
   Open(10, file=Namefile, action="Write", form="unformatted")
-  Write(10) U
+  Write(10) U(::ds,::ds,:)
   Close(10)
 
   Write(Namefile, '("./P/",i5.5,".bin")')  dN
   Open(10, file=Namefile, action="Write", form="unformatted")
-  Write(10) Rho
+  Write(10) Rho(::ds,::ds)
   Close(10)
 End Subroutine
 
