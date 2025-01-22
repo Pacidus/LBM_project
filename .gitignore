@@ -1,4 +1,5 @@
 simulation/**/*.png
+simulation/**/*.bin
 simulation/**/*.pbm
 simulation/**/*.csv
 simulation/**/*.mp4
