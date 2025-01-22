@@ -1,15 +1,15 @@
 MAKEFLAGS += --no-print-directory
 
 make: windtunnel.f90
-	gfortran windtunnel.f90 -O3 -Wall -o prog
+	gfortran windtunnel.f90 -O1 -Wall -o prog
 	make clean
 
 Rmake: Rewindtunnel.f90
-	gfortran Rewindtunnel.f90 -O3 -Wall -o prog
+	gfortran Rewindtunnel.f90 -O1 -Wall -o prog
 	make clean
 
 lmake: windtunnel.f90
-	gfortran windtunnel.f90 -O3 -mcmodel=large -o prog
+	gfortran windtunnel.f90 -O1 -mcmodel=large -o prog
 	make clean
 
 movie: ./anim/*.png

@@ -1,5 +1,6 @@
 ! Author : Pacidus
 ! Started at: 31.10.2020 00:17:57
+! Rework Sunday 19.01.2025 23:33
 
 !===============================================================================
 !                               Fluid Constants.
@@ -20,7 +21,7 @@ Module Sconst
   Real(8), Parameter :: lx  = 2.5d0         ! m     Length of the box
   Real(8), Parameter :: ly  = 2d0           ! m     Height of the box
   Real(8), Parameter :: t   = 5d0           ! s     Total time of the simulation
-  Real(8), Parameter :: sp  = 2d0           ! m·s⁻¹ Inlet Speed    
+  Real(8), Parameter :: sp  = 1.5d1        ! m·s⁻¹ Inlet Speed
 End Module Sconst
 
 
@@ -31,13 +32,15 @@ Module Dconst
   Use Fconst, Only: cs
   Use Sconst, Only: lx, ly, t
   Implicit None
-  Real(8), Parameter :: dt    = 5d-5        ! s Timestep
+  Real(8), Parameter :: dt    = 1.5d-5      ! s Timestep
   Real(8), Parameter :: dl    = cs*dt       ! m Spatial step
   Integer(4), Parameter :: H  = Int(ly/dl)  ! ø Number of height-step
   Integer(4), Parameter :: L  = Int(lx/dl)  ! ø Number of length-step
-  Integer(4), Parameter :: N  = Int(t/dt)   ! ø Number of timestep
+  Integer(4), Parameter :: NP = Int(t/dt)   ! ø Number of timestep (partial)
+  Integer(4), Parameter :: st = 200         ! ø Number of snapshot
+  integer(4), Parameter :: d  = NP/st       ! ø Itterations between of snapshot
+  Integer(4), Parameter :: N  = st*(d + 1)  ! ø Number of timestep (total)
 End Module Dconst
-
 
 !===============================================================================
 !                         Computationnal Constants.
@@ -53,8 +56,8 @@ Module Cconst
   Real(8), Parameter :: ics2  = 1d0/cs2     ! s²·m⁻²  Inverse of cs2
   Real(8), Parameter :: clean = nu*ics2/dt  ! ø       No reason except aesthetic
   Real(8), Parameter :: tau   = clean+5d-1  ! ø       Characteristic timescale
-  Real(8), Parameter :: itau  = 1d0/tau     ! ø       Inverse of tau
-  Real(8), Parameter :: mitau = 1d0-itau    ! ø       One minus inverse of tau
+  Real(8), Parameter :: itau  = 1d0 / tau   ! ø       Inverse of tau
+  Real(8), Parameter :: mitau = 1d0 - itau  ! ø       One minus inverse of tau
   Real(8), Parameter :: zh    = cs/(cs-sp)  ! ø       Zou/He parameter
   Real(8), Parameter :: sp2   = sp*sp       ! m²·s⁻²  Outlet speed squared
 End Module Cconst
@@ -70,13 +73,11 @@ Module Lconst
   Integer(1), Parameter :: Q        = 9     ! Q9  Number of speed discretization
   Integer(1), Parameter :: ed(Q,D)  = &     ! ø   Directions of the speeds
     reshape(&
-    (/0,  1,  0, -1,  0,  1, -1, -1,  1,&
-      0,  0,  1,  0, -1,  1,  1, -1, -1/),&
-    (/Q,D/))
+    [0,  1,  0, -1,  0,  1, -1, -1,  1,&
+     0,  0,  1,  0, -1,  1,  1, -1, -1], [Q,D])
   Real(8), Parameter :: e(Q,D) = c*dble(ed) ! m·s⁻¹   Speeds vectors
   Real(8), Parameter :: w(Q)   = &          ! ø       D2Q9 Weights
-    (/4d0, 1d0, 1d0, 1d0, 1d0, 1d0/4d0,&
-    1d0/4d0, 1d0/4d0, 1d0/4d0/)/9d0
+    [4d0, 1d0, 1d0, 1d0, 1d0, .25d0, .25d0, .25d0, .25d0]/9d0
 End Module Lconst
 
 !===============================================================================
@@ -84,13 +85,13 @@ End Module Lconst
 !===============================================================================
 Module Var
   Implicit None
-  Integer(4), Allocatable :: Obj(:, :)      ! ø       coordinate of the Object
+  Logical, Allocatable :: Obj(:, :)         ! ø       Mask of the Object
+  Logical, Allocatable :: nObj(:, :)        ! ø       Mask of the Empty space
   Real(8), Allocatable :: Feq(:,:,:)        ! kg·m⁻³  Density speed distribution
   Real(8), Allocatable :: Usqr(:,:)         ! m·s⁻¹   Macroscopic speed squared
   Real(8), Allocatable :: F(:,:,:)          ! kg·m⁻³  Density speed distribution
   Real(8), Allocatable :: U(:,:,:)          ! m·s⁻¹   Macroscopic speed
   Real(8), Allocatable :: Rho(:,:)          ! kg·m⁻³  Macroscopic density
-  Integer(4) :: s                           ! ø       Number of element in Obj
 End Module Var
 
 
@@ -99,36 +100,28 @@ End Module Var
 !===============================================================================
 Program LBM2D
   Use Var
-  Use Dconst, Only: L, H, N
+  Use Dconst, Only: L, H, N, d, st
   Implicit None
-  Integer(4) :: dN, d = 200, ni = 0
-!  Real(4) :: time1, time2, timeTot
+  Integer(4) :: dN, ni = 0
   Call Allocatall
   Call InitF
-  
-!  timeTot = 0
+
   Do dN = 0, N
-    If (Modulo(dN, d) == 0) Then      
+    If (Modulo(dN, d) == 0) Then
       Call Savefile(ni)
+      Write(*, *) ni, "/", st
       ni = ni + 1
     End If
 
-!    CALL CPU_TIME(time1)
     CALL IOlet
     CALL Bound
     CALL CMacro
     CALL CFeq
     CALL Collide
     CALL Stream
-!    CALL CPU_TIME(time2)
-!    timeTot = timeTot + (time2-time1)
-!    Print *, real(H*L*(1+dN))/timetot
   End Do
-  
+
   Call Deallocatall
-  
-!  Print *, real(H*L*N)/timetot
-!  Print *, timetot
 End Program LBM2D
 
 
@@ -147,52 +140,33 @@ Subroutine IOlet
   Use Dconst, Only: L, H
   Use Sconst, Only: sp
   Implicit None
-  Real(8) :: sca, Feq1, Feq2, R
+  Real(8) :: sca(H), Feq1(H), Feq2(H), R(H)
   Integer(4) :: j!, i
 
-  ! Outflow condition
-  ! Top & Bottom wall
-!  Do i = 1, L
-!    F(7,i,1) = F(7,i,2)
-!    F(3,i,1) = F(3,i,2)
-!    F(6,i,1) = F(6,i,2)
-!    F(8,i,H) = F(8,i,H-1)
-!    F(5,i,H) = F(5,i,H-1)
-!    F(9,i,H) = F(9,i,H-1)
-!  End Do
-  ! Right wall
-  Do j = 1, H
-    F(7,L,j) = F(7,L-1,j)
-    F(4,L,j) = F(4,L-1,j)
-    F(8,L,j) = F(8,L-1,j)
-  End Do
-  
+  F([7,4,8],L,:) = F([7,4,8],L-1,:)
+
   ! Inflow condition Left wall
-  Do j = 1, H
-    U(1,1,j) = sp
-    U(2,1,j) = 0d0
-    sca = (F(4,1,j)+F(1,1,j)+F(2,1,j)+2*(F(7,1,j)+F(4,1,j)+F(8,1,j)))
-    r = sca*zh
-    Rho(1,j) = r
-    
-    sca = e(8,1)*sp
-    Feq1 = w(8)*(1d0+(sca+.5d0*((sca*sca*ics2)-sp2))*ics2)
-    sca = e(6,1)*sp
-    Feq2 = w(6)*(1d0+(sca+.5d0*((sca*sca*ics2)-sp2))*ics2)
-    F(6,1,j) = F(8,1,j) + r*(Feq2 - Feq1)
-    
-    sca = e(4,1)*sp
-    Feq1 = w(4)*(1d0+(sca+.5d0*((sca*sca*ics2)-sp2))*ics2)
-    sca = e(2,1)*sp
-    Feq2 = w(2)*(1d0+(sca+.5d0*((sca*sca*ics2)-sp2))*ics2)
-    F(2,1,j) = F(4,1,j) + r*(Feq2 - Feq1)
-    
-    sca = e(7,1)*sp
-    Feq1 = w(7)*(1d0+(sca+.5d0*((sca*sca*ics2)-sp2))*ics2)
-    sca = e(9,1)*sp
-    Feq2 = w(9)*(1d0+(sca+.5d0*((sca*sca*ics2)-sp2))*ics2)
-    F(9,1,j) = F(7,1,j) + r*(Feq2 - Feq1)
-  End Do
+  sca(:) = (F(4,1,:)+F(1,1,:)+F(2,1,:)+2*(F(7,1,:)+F(4,1,:)+F(8,1,:)))
+  R(:) = sca*zh
+  Rho(1,:) = R(:)
+
+  sca(:) = e(8,1)*sp
+  Feq1 = w(8)*(1d0+(sca+.5d0*((sca*sca*ics2)-sp2))*ics2)
+  sca = e(6,1)*sp
+  Feq2 = w(6)*(1d0+(sca+.5d0*((sca*sca*ics2)-sp2))*ics2)
+  F(6,1,:) = F(8,1,:) + r*(Feq2 - Feq1)
+
+  sca = e(4,1)*sp
+  Feq1 = w(4)*(1d0+(sca+.5d0*((sca*sca*ics2)-sp2))*ics2)
+  sca = e(2,1)*sp
+  Feq2 = w(2)*(1d0+(sca+.5d0*((sca*sca*ics2)-sp2))*ics2)
+  F(2,1,:) = F(4,1,:) + r*(Feq2 - Feq1)
+
+  sca = e(7,1)*sp
+  Feq1 = w(7)*(1d0+(sca+.5d0*((sca*sca*ics2)-sp2))*ics2)
+  sca = e(9,1)*sp
+  Feq2 = w(9)*(1d0+(sca+.5d0*((sca*sca*ics2)-sp2))*ics2)
+  F(9,1,:) = F(7,1,:) + r*(Feq2 - Feq1)
 End Subroutine
 
 
@@ -201,34 +175,28 @@ End Subroutine
 !===============================================================================
 Subroutine Bound
   Use Dconst, Only: L, H
-  Use Var, Only: F, Obj, s
+  Use Var, Only: F, Obj
   Implicit None
-  Integer(4) :: n, i, j
-  Real(8) :: fi
-  
-  Do n = 1, s
-    i = Obj(1,n)
-    j = Obj(2,n)
-    
-    fi = F(2,i,j)
-    F(2,i,j) = F(4,i,j)
-    F(4,i,j) = fi
-    
-    fi = F(6,i,j)
-    F(6,i,j) = F(8,i,j)
-    F(8,i,j) = fi
-    
-    fi = F(3,i,j)
-    F(3,i,j) = F(5,i,j)
-    F(5,i,j) = fi
-        
-    fi = F(7,i,j)
-    F(7,i,j) = F(9,i,j)
-    F(9,i,j) = fi
-  End Do
-  
-End Subroutine
+  Real(8) :: temp(L, H)
 
+  Where(Obj)
+    temp = F(4, :, :)
+    F(4, :, :) = F(2, :, :)
+    F(2, :, :) = temp
+
+    temp = F(5, :, :)
+    F(5, :, :) = F(3, :, :)
+    F(3, :, :) = temp
+
+    temp = F(8, :, :)
+    F(8, :, :) = F(6, :, :)
+    F(6, :, :) = temp
+
+    temp = F(9, :, :)
+    F(9, :, :) = F(7, :, :)
+    F(7, :, :) = temp
+  End Where
+End Subroutine
 
 !===============================================================================
 !                               Compute Macro
@@ -238,30 +206,22 @@ Subroutine CMacro
   Use Dconst, Only: L, H
   Use Lconst, Only: Q, e
   Implicit None
-  Integer(4) :: i, j
   Integer(1) :: k
-  Real(8) :: r
-   
-  Do j = 1, H
-    Do i = 1, L
-      Rho(i,j) = 0
-      U(1,i,j) = 0
-      U(2,i,j) = 0
-      Do k = 1, Q
-        Rho(i,j) = Rho(i,j) + F(k,i,j)
-        If(e(k,1) /= 0) Then
-          U(1,i,j) = U(1,i,j) + F(k,i,j)*e(k,1)
-        End If
-        If(e(k,2) /= 0) Then
-          U(2,i,j) = U(2,i,j) + F(k,i,j)*e(k,2)
-        End If
-      End Do
-      r = 1d0/Rho(i,j)
-      U(1,i,j)  = U(1,i,j)*r
-      U(2,i,j)  = U(2,i,j)*r
-      Usqr(i,j) = U(1,i,j) * U(1,i,j) + U(2,i,j) * U(2,i,j)
-    End Do
+  Real(8) :: R(L, H)
+  Rho = 0
+  U = 0
+  Do k = 1, Q
+    Rho(:,:) = Rho(:,:) + F(k,:,:)
+    If(e(k,1) /= 0) Then
+      U(1,:,:) = U(1,:,:) + F(k,:,:) * e(k,1)
+    End If
+    If(e(k,2) /= 0) Then
+      U(2,:,:) = U(2,:,:) + F(k,:,:) * e(k,2)
+    End If
   End Do
+  U(1,:,:)  = U(1,:,:) / Rho(:,:)
+  U(2,:,:)  = U(2,:,:) / Rho(:,:)
+  Usqr(:,:) = U(1,:,:) * U(1,:,:) + U(2,:,:) * U(2,:,:)
 End Subroutine
 
 
@@ -269,50 +229,41 @@ End Subroutine
 !                               Compute Feq
 !===============================================================================
 Subroutine CFeq
-  Use Var, Only: Feq, U, Usqr, Rho
+  Use Var, Only: Feq, U, Usqr, Rho, nObj
   Use Lconst, Only: Q, e, w
   Use Dconst, Only: L, H
   Use Cconst, Only: ics2
   Implicit None
-  Real(8) :: Ue
-  Integer(4) :: i, j
+  Real(8) :: Ue(L,H)
   Integer(1) :: k
   
-  Do j = 1, H
-    Do i = 1, L
-      Feq(1,i,j) = w(1)*Rho(i,j)*(1d0-(.5d0*Usqr(i,j)*ics2))
-    End Do
+  !Where (nObj) 
+    Feq(1,:,:) = w(1) * Rho(:,:) * ( 1d0 - ( .5d0 * Usqr(:,:) * ics2))
+  !End Where
+  
+  Do k = 2, Q
+    !Where (nObj)
+      Ue = e(k,1)*U(1,:,:)+e(k,2)*U(2,:,:)
+      Feq(k,:,:) = w(k)*Rho(:,:)*(1d0+(Ue(:,:)+.5d0*((Ue(:,:)*Ue(:,:)*ics2)-Usqr(:,:)))*ics2)
+    !End Where
   End Do
-    
-  Do j = 1, H
-    Do i = 1, L
-      Do k = 2, Q
-        Ue = e(k,1)*U(1,i,j)+e(k,2)*U(2,i,j)
-        Feq(k,i,j) = w(k)*Rho(i,j)*(1d0+(Ue+.5d0*((Ue*Ue*ics2)-Usqr(i,j)))*ics2)
-      End Do
-    End Do
-  End Do
-End Subroutine
+ End Subroutine
 
 
 !===============================================================================
 !                             Collide Step
 !===============================================================================
 Subroutine Collide
-  Use Var, Only: F, Feq
+  Use Var, Only: F, Feq, nObj
   Use Cconst, Only: itau, mitau
   Use Dconst, Only: L, H
   Use Lconst, Only: Q
   Implicit None
-  Integer(4) :: i, j
-  Integer(1) :: k
-  
-  Do j = 1, H
-    Do i = 1, L
-      Do k = 1, Q
-        F(k,i,j)= mitau*F(k,i,j) + itau*Feq(k,i,j)
-      End Do
-    End Do
+  Integer(8) :: k
+  Do k=1, Q
+    !Where (nObj)
+      F(:, :, k) = mitau * F(:, :, k) + itau * Feq(:, :, k)
+    !End Where
   End Do
 End Subroutine
 
@@ -328,27 +279,13 @@ Subroutine Stream
   Integer(1) :: k, e
   Integer(4) :: i, j
   Real(8) :: fs
-  
-  Do k = 2, Q
+   
+  Do k = 2, Q  
     If (ed(k,1) /= 0) Then
-      e = (ed(k,1)+1)*5d-1
-      Do j = 1, H
-        fs = F(k,1+e*(L-1),j)
-        Do i = 2+e*(L-3), L-e*(L-1), -ed(k,1) 
-          F(k,i,j) = F(k,i-ed(k,1),j)
-        End Do
-        F(k,L-e*(L-1),j) = fs
-      End Do
+      F(k,:,:) = CSHIFT(F(k,:,:), ed(k,1), 2)
     End If
     If (ed(k,2) /= 0) Then
-      e = (ed(k,2)+1)*5d-1
-      Do i = 1, L
-        fs = F(k,i,1+e*(H-1))
-        Do j = 2+e*(H-3), H-e*(H-1), -ed(k,2)
-          F(k,i,j) = F(k,i,j-ed(k,2))
-        End Do
-        F(k,i,H-e*(H-1)) = fs
-      End Do
+      F(k,:,:) = CSHIFT(F(k,:,:), ed(k,2), 1)
     End If
   End Do
   
@@ -375,21 +312,21 @@ End Subroutine
 !===============================================================================
 Subroutine Object
   Use Dconst, Only: L, H
-  Use Var, Only: Obj, s
+  Use Var, Only: Obj, nObj
   Implicit None
   Character(len=210) :: command             ! The bash command
   Integer(1) :: Ob(L,H)
   Integer(4) :: i, j                        ! Itterator
-  
+
   command = '("rsvg-convert -w ",i0," -h ",i0," objet.svg -o objet.png")'
   Write(command, command) L, H
-  
-  Call execute_command_line(command, wait=.true.)
-  
-  command = "convert -compress none objet.png -alpha extract -threshold 0%&
+
+  Call execute_command_line(command, wait=.True.)
+
+  command = "magick -compress none objet.png -alpha extract -threshold 0%&
   & -negate objet.pbm"
   Call execute_command_line(command, wait=.true.)
-  
+
   Open(10, file = 'objet.pbm', action='read')
 
   Read(10, *) command
@@ -399,27 +336,25 @@ Subroutine Object
     Read(10, *) Ob(:, i)
   End Do
   Close(10)
-    
-  s = 0
-  Do j=1, H
-    Do i=1, l
-      s = s + Ob(i, j)
-    End Do
-  End Do
-  
-  Allocate(Obj(2,s))
-  
-  s = 0
-  Do j=1, H
-    Do i=1, l
-      If (Ob(i, j) == 1) Then
-        s = s + 1
-        Obj(1,s) = i
-        Obj(2,s) = j
+  Allocate(Obj(L,H))
+  Allocate(nObj(L,H))
+  Obj = .False.
+  nObj = (Ob == 0)
+  Open(10, file = 'nObj', action='write')
+  Open(11, file = 'Obj', action='write')
+  Do i=1, L
+    Do j=1, H
+      If( Ob(i,j) == 1 ) Then
+        Obj(i,j) = ANY(Ob(i-1:i+1,j-1:j+1) == 0)
+        nObj(i,j) = Obj(i,j)
       End If
     End Do
+    Write(10,*) nObj(i,:)
+    Write(11,*) Obj(i,:)
   End Do
-  
+  Close(10)
+  Close(11)
+
 End Subroutine
 
 
@@ -432,21 +367,16 @@ Subroutine Savefile(dN)
   Implicit None
   Character(len=24) :: Namefile
   Integer(4) :: dN, i
-  
-  Write(Namefile, '("./Ux/",i5.5,".csv")') dN
-  Open(10, file=Namefile, action='Write')
-  Write(Namefile, '("./Uy/",i5.5,".csv")') dN
-  Open(11, file=Namefile, action='Write')
-  Write(Namefile, '("./P/",i5.5,".csv")')  dN
-  Open(12, file=Namefile, action='Write')
-  Do i=1, H
-    Write(10, *) U(1,:,i)
-    Write(11, *) U(2,:,i)
-    Write(12, *) Rho(:,i)
-  End Do
+
+  Write(Namefile, '("./U/",i5.5,".bin")') dN
+  Open(10, file=Namefile, action="Write", form="unformatted")
+  Write(10) U
   Close(10)
-  Close(11)
-  Close(12)
+
+  Write(Namefile, '("./P/",i5.5,".bin")')  dN
+  Open(10, file=Namefile, action="Write", form="unformatted")
+  Write(10) Rho
+  Close(10)
 End Subroutine
 
 
@@ -458,7 +388,7 @@ Subroutine Allocatall
   Use Var, Only: F, Feq, U, Usqr, Rho
   Use Dconst, Only: L, H
   Use Lconst, Only: Q, D
-  
+
   Allocate(F(Q,L,H))
   Allocate(Feq(Q,L,H))
   Allocate(U(D,L,H))
@@ -473,7 +403,7 @@ End Subroutine
 !===============================================================================
 Subroutine Deallocatall
   Use Var
-  
+
   Deallocate(F)
   Deallocate(Feq)
   Deallocate(U)
